@@ -14,11 +14,15 @@ namespace Gazeus.DesafioMatch3.Controllers
         [SerializeField] private int _boardHeight = 10;
         [SerializeField] private int _boardWidth = 10;
 
+        [SerializeField] private PlayerResourcesView _playerResourcesView;
+        
         private GameService _gameEngine;
         private bool _isAnimating;
         private int _selectedX = -1;
         private int _selectedY = -1;
 
+        private readonly int scoreMultiplier = 10;
+        
         #region Unity
         private void Awake()
         {
@@ -43,7 +47,8 @@ namespace Gazeus.DesafioMatch3.Controllers
             BoardSequence boardSequence = boardSequences[index];
 
             Sequence sequence = DOTween.Sequence();
-            sequence.Append(_boardView.DestroyTiles(boardSequence.MatchedPosition));
+            sequence.Append(_boardView.DestroyTiles(boardSequence.MatchedPosition).
+                OnComplete(()=>{AddPoints(boardSequence.MatchedPosition.Count*scoreMultiplier);}));
             sequence.Append(_boardView.MoveTiles(boardSequence.MovedTiles));
             sequence.Append(_boardView.CreateTile(boardSequence.AddedTiles));
 
@@ -95,5 +100,11 @@ namespace Gazeus.DesafioMatch3.Controllers
                 _selectedY = y;
             }
         }
+
+        private void AddPoints(int value)
+        {
+            _playerResourcesView.AddPoints(value);
+        }
+        
     }
 }
