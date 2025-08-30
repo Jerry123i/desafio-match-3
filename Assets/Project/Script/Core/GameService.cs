@@ -162,7 +162,7 @@ namespace Gazeus.DesafioMatch3.Core
                 return board;
             },
             //Matches
-            FindMatches
+            board => FindMatches(board, true)
             );
         }
 
@@ -225,9 +225,11 @@ namespace Gazeus.DesafioMatch3.Core
             return board;
         }
 
-        private static List<List<bool>> FindMatches(List<List<Tile>> newBoard)
+        private static List<List<bool>> FindMatches(List<List<Tile>> newBoard, bool applySpecials = false)
         {
             List<List<bool>> matchedTiles = new();
+            List<MatchInformation> matchInformation = new();
+            
             for (int y = 0; y < newBoard.Count; y++)
             {
                 matchedTiles.Add(new List<bool>(newBoard[y].Count));
@@ -248,6 +250,9 @@ namespace Gazeus.DesafioMatch3.Core
                         matchedTiles[y][x] = true;
                         matchedTiles[y][x - 1] = true;
                         matchedTiles[y][x - 2] = true;
+
+                        matchInformation.AddAndCombine(new MatchInformation(Direction.Horizontal, x,y,3, newBoard[y][x].Type));
+
                     }
 
                     if (y > 1 &&
@@ -257,10 +262,51 @@ namespace Gazeus.DesafioMatch3.Core
                         matchedTiles[y][x] = true;
                         matchedTiles[y - 1][x] = true;
                         matchedTiles[y - 2][x] = true;
+                        
+                        matchInformation.AddAndCombine(new MatchInformation(Direction.Vertical, x,y,3, newBoard[y][x].Type));
                     }
                 }
             }
 
+            if (applySpecials == false)
+                return matchedTiles;
+
+
+            for (int i = 0; i < matchInformation.Count; i++)
+            {
+                var match = matchInformation[i];
+                
+                if(match.Length < 4)
+                    continue;
+
+                switch (match.TileType)
+                {
+                    case 0: // Blue - Line Clear
+                        if (match.Direction == Direction.Horizontal)
+                            matchedTiles = Utils.CombineBooleanTables(matchedTiles, FindLine(newBoard, match.y));
+                        break;
+                    
+                    case 1: // Green - Column Clear
+                        if (match.Direction == Direction.Vertical)
+                            matchedTiles = Utils.CombineBooleanTables(matchedTiles, FindColumn(newBoard, match.x));
+                        break;
+                    
+                    case 2: // Orange - Clear all orange
+
+                        matchedTiles = Utils.CombineBooleanTables(matchedTiles, FindSameType(newBoard, match.TileType));
+                        
+                        break;
+                    
+                    case 3: //Yellow = Explosion
+
+                        matchedTiles = Utils.CombineBooleanTables(matchedTiles, FindRadius(newBoard, match.x, match.y, 3));
+                        
+                        break;
+                }
+                
+            }
+            
+            
             return matchedTiles;
         }
 
