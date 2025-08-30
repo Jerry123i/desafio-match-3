@@ -18,6 +18,8 @@ namespace Gazeus.DesafioMatch3.Views
 
         private GameObject[][] _tiles;
         private TileSpotView[][] _tileSpots;
+        
+        private TileSpotView currentlySelectedSpot;
 
         public void CreateBoard(List<List<Tile>> board)
         {
@@ -117,6 +119,27 @@ namespace Gazeus.DesafioMatch3.Views
             return sequence;
         }
 
+        public void ClearSelectedSpotEffect()
+        {
+            if(currentlySelectedSpot!=null)
+                currentlySelectedSpot.SetHighlight(false);
+        }
+        
+        public void SetTileSpotSelectedEffect(int x, int y)
+        {
+            ClearSelectedSpotEffect();
+            
+            if (x < 0 || y < 0)
+            {
+                currentlySelectedSpot = null;
+                return;
+            }
+
+            currentlySelectedSpot = _tileSpots[y][x];
+            currentlySelectedSpot.SetHighlight(true);
+
+        }
+        
         public Tween SwapTiles(int fromX, int fromY, int toX, int toY)
         {
             Sequence sequence = DOTween.Sequence();

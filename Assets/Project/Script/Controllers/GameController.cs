@@ -91,6 +91,7 @@ namespace Gazeus.DesafioMatch3.Controllers
                         }
                         _selectedX = -1;
                         _selectedY = -1;
+                        _boardView.SetTileSpotSelectedEffect(_selectedX,_selectedY);
                     };
                 }
             }
@@ -99,6 +100,12 @@ namespace Gazeus.DesafioMatch3.Controllers
                 _selectedX = x;
                 _selectedY = y;
             }
+            
+            if(_isAnimating)
+                _boardView.ClearSelectedSpotEffect();
+            else
+                _boardView.SetTileSpotSelectedEffect(_selectedX,_selectedY);
+            
         }
 
         private void AddPoints(int value)

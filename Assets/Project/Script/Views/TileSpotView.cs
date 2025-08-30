@@ -10,6 +10,7 @@ namespace Gazeus.DesafioMatch3.Views
         public event Action<int, int> Clicked;
 
         [SerializeField] private Button _button;
+        [SerializeField] private Image _highlightImage;
 
         private int _x;
         private int _y;
@@ -39,6 +40,11 @@ namespace Gazeus.DesafioMatch3.Views
         {
             tile.transform.SetParent(transform, false);
             tile.transform.position = transform.position;
+        }
+
+        public void SetHighlight(bool value)
+        {
+            _highlightImage.gameObject.SetActive(value);
         }
 
         private void OnTileClick()
