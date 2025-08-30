@@ -108,6 +108,7 @@ namespace Gazeus.DesafioMatch3.Controllers
             
         }
 
+        //TODO Receber conjuntos de linhas e calcular aqui a pontuação
         private void AddPoints(int value)
         {
             _playerResourcesView.AddPoints(value);
