@@ -67,7 +67,8 @@ namespace Gazeus.DesafioMatch3
             {
                 for (int x = 0; x < referenceBoard.Count; x++)
                 {
-                    table[y][x] = referenceBoard[y][x].Type == type;
+                    if (referenceBoard[y][x].Type == type)
+                        table[y][x] = true;
                 }
             }
         }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -38,6 +39,7 @@ namespace Gazeus.DesafioMatch3.Models
             var match = list.Find(listItem =>
             {
                 bool sameType = listItem.TileType == newInfo.TileType;
+                bool sameDirection = listItem.Direction == newInfo.Direction;
                 bool aligned;
                 bool overlap;
 
@@ -52,7 +54,7 @@ namespace Gazeus.DesafioMatch3.Models
                     overlap = listItem.y + listItem.Length >= newInfo.y;
                 }
 
-                return sameType && aligned && overlap;
+                return sameType && aligned && overlap && sameDirection;
 
             });
 
