@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Linq;
 using Gazeus.DesafioMatch3.Models;
 using UnityEngine;
 
@@ -69,6 +70,17 @@ namespace Gazeus.DesafioMatch3
                 {
                     if (referenceBoard[y][x].Type == type)
                         table[y][x] = true;
+                }
+            }
+        }
+
+        public static void Clear(this List<List<bool>> table)
+        {
+            for (int y = 0; y < table.Count; y++)
+            {
+                for (int x = 0; x < table.Count; x++)
+                {
+                    table[y][x] = false;
                 }
             }
         }

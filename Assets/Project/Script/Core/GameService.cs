@@ -60,7 +60,6 @@ namespace Gazeus.DesafioMatch3.Core
             matchInformation = FindMatches(newBoard);
 
             List<List<bool>> tilesToDestroy = new List<List<bool>>();
-            //TODO deixar salvo um board falso para copiar
             for (int y = 0; y < newBoard.Count; y++)
             {
                 tilesToDestroy.Add(new List<bool>(newBoard[y].Count));
@@ -163,7 +162,8 @@ namespace Gazeus.DesafioMatch3.Core
                 };
                 boardSequences.Add(sequence);
                 
-                tilesToDestroy = new List<List<bool>>();
+                tilesToDestroy.Clear();
+                
                 //TODO deixar salvo um board falso para copiar
                 for (int y = 0; y < newBoard.Count; y++)
                 {
