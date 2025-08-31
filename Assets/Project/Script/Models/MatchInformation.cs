@@ -24,7 +24,11 @@ namespace Gazeus.DesafioMatch3.Models
             this.Length = length;
             this.TileType = type;
         }
-        
+
+        public override string ToString()
+        {
+            return $"{Direction} ({x},{y}) Length:{Length}";
+        }
     }
 
     public static class MatchInformationFunctions
@@ -64,6 +68,23 @@ namespace Gazeus.DesafioMatch3.Models
                 match.Length = newInfo.y + newInfo.Length - match.y;
 
         }
+
+        public static void MarkMatches(this List<List<bool>> tileBoard, List<MatchInformation> matches)
+        {
+            for (int i = 0; i < matches.Count; i++)
+            {
+                var match = matches[i];
+                for (int j = 0; j < match.Length; j++)
+                {
+                    if (match.Direction == Direction.Horizontal)
+                        tileBoard[match.y][match.x + j] = true;
+                    else
+                        tileBoard[match.y + j][match.x] = true;
+                }
+                
+            }
+        }
+        
     }
     
 }

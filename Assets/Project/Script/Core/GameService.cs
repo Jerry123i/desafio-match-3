@@ -48,8 +48,7 @@ namespace Gazeus.DesafioMatch3.Core
 
             return _boardTiles;
         }
-
-        private List<BoardSequence> ModifyBoard(Func<List<List<Tile>>, List<List<Tile>>> tileManipulation, Func<List<List<Tile>>,List<List<bool>>> destructionParameters)
+        private List<BoardSequence> ModifyBoard(Func<List<List<Tile>>, List<List<Tile>>> tileManipulation, Action<List<List<bool>>> destructionParameters, bool useFindMatches)
         {
             List<List<Tile>> newBoard = CopyBoard(_boardTiles);
 
@@ -57,8 +56,29 @@ namespace Gazeus.DesafioMatch3.Core
                 newBoard = tileManipulation(newBoard);
 
             List<BoardSequence> boardSequences = new();
-            List<List<bool>> matchedTiles = destructionParameters(newBoard);
-            while (HasMatch(matchedTiles))
+            List<MatchInformation> matchInformation = new();
+            matchInformation = FindMatches(newBoard);
+
+            List<List<bool>> tilesToDestroy = new List<List<bool>>();
+            //TODO deixar salvo um board falso para copiar
+            for (int y = 0; y < newBoard.Count; y++)
+            {
+                tilesToDestroy.Add(new List<bool>(newBoard[y].Count));
+                for (int x = 0; x < newBoard.Count; x++)
+                {
+                    tilesToDestroy[y].Add(false);
+                }
+            }
+
+            if(useFindMatches)
+                tilesToDestroy.MarkMatches(matchInformation);
+            else
+                if (destructionParameters != null)
+                    destructionParameters(tilesToDestroy);
+
+            tilesToDestroy = ApplySpecials(newBoard, matchInformation, tilesToDestroy);
+            
+            do
             {
                 //Cleaning the matched tiles
                 List<Vector2Int> matchedPosition = new();
@@ -66,7 +86,7 @@ namespace Gazeus.DesafioMatch3.Core
                 {
                     for (int x = 0; x < newBoard[y].Count; x++)
                     {
-                        if (matchedTiles[y][x])
+                        if (tilesToDestroy[y][x])
                         {
                             matchedPosition.Add(new Vector2Int(x, y));
                             newBoard[y][x] = new Tile { Id = -1, Type = -1 };
@@ -142,8 +162,23 @@ namespace Gazeus.DesafioMatch3.Core
                     AddedTiles = addedTiles
                 };
                 boardSequences.Add(sequence);
-                matchedTiles = FindMatches(newBoard);
-            }
+                
+                tilesToDestroy = new List<List<bool>>();
+                //TODO deixar salvo um board falso para copiar
+                for (int y = 0; y < newBoard.Count; y++)
+                {
+                    tilesToDestroy.Add(new List<bool>(newBoard[y].Count));
+                    for (int x = 0; x < newBoard.Count; x++)
+                    {
+                        tilesToDestroy[y].Add(false);
+                    }
+                }
+                
+                matchInformation = FindMatches(newBoard);
+                tilesToDestroy.MarkMatches(matchInformation);
+                tilesToDestroy = ApplySpecials(newBoard, matchInformation, tilesToDestroy);
+
+            } while (matchInformation.Count > 0);
 
             _boardTiles = newBoard;
 
@@ -161,8 +196,8 @@ namespace Gazeus.DesafioMatch3.Core
                 (board[toY][toX], board[fromY][fromX]) = (board[fromY][fromX], board[toY][toX]);
                 return board;
             },
-            //Matches
-            board => FindMatches(board, true)
+            null,
+            true
             );
         }
 
@@ -225,20 +260,10 @@ namespace Gazeus.DesafioMatch3.Core
             return board;
         }
 
-        private static List<List<bool>> FindMatches(List<List<Tile>> newBoard, bool applySpecials = false)
+        private static List<MatchInformation> FindMatches(List<List<Tile>> newBoard, bool applySpecials = false)
         {
-            List<List<bool>> matchedTiles = new();
             List<MatchInformation> matchInformation = new();
             
-            for (int y = 0; y < newBoard.Count; y++)
-            {
-                matchedTiles.Add(new List<bool>(newBoard[y].Count));
-                for (int x = 0; x < newBoard.Count; x++)
-                {
-                    matchedTiles[y].Add(false);
-                }
-            }
-
             for (int y = 0; y < newBoard.Count; y++)
             {
                 for (int x = 0; x < newBoard[y].Count; x++)
@@ -247,132 +272,56 @@ namespace Gazeus.DesafioMatch3.Core
                         newBoard[y][x].Type == newBoard[y][x - 1].Type &&
                         newBoard[y][x - 1].Type == newBoard[y][x - 2].Type)
                     {
-                        matchedTiles[y][x] = true;
-                        matchedTiles[y][x - 1] = true;
-                        matchedTiles[y][x - 2] = true;
-
-                        matchInformation.AddAndCombine(new MatchInformation(Direction.Horizontal, x,y,3, newBoard[y][x].Type));
-
+                        matchInformation.AddAndCombine(new MatchInformation(Direction.Horizontal, x-2,y,3, newBoard[y][x].Type));
                     }
 
                     if (y > 1 &&
                         newBoard[y][x].Type == newBoard[y - 1][x].Type &&
                         newBoard[y - 1][x].Type == newBoard[y - 2][x].Type)
                     {
-                        matchedTiles[y][x] = true;
-                        matchedTiles[y - 1][x] = true;
-                        matchedTiles[y - 2][x] = true;
-                        
-                        matchInformation.AddAndCombine(new MatchInformation(Direction.Vertical, x,y,3, newBoard[y][x].Type));
+                        matchInformation.AddAndCombine(new MatchInformation(Direction.Vertical, x,y-2,3, newBoard[y][x].Type));
                     }
                 }
             }
 
-            if (applySpecials == false)
-                return matchedTiles;
+            return matchInformation;
+        }
 
-
-            //TODO Separar a chamada de especiais
+        private static List<List<bool>> ApplySpecials(List<List<Tile>> board, List<MatchInformation> matchInformation, List<List<bool>> markedTiles)
+        {
             for (int i = 0; i < matchInformation.Count; i++)
             {
                 var match = matchInformation[i];
                 
                 if(match.Length < 4)
                     continue;
-
+        
                 switch (match.TileType)
                 {
                     case 0: // Blue - Line Clear
                         if (match.Direction == Direction.Horizontal)
-                            matchedTiles = Utils.CombineBooleanTables(matchedTiles, FindLine(newBoard, match.y));
-                        break;
+                            markedTiles.MarkLine(match.y);
+                        return markedTiles; 
                     
                     case 1: // Green - Column Clear
                         if (match.Direction == Direction.Vertical)
-                            matchedTiles = Utils.CombineBooleanTables(matchedTiles, FindColumn(newBoard, match.x));
-                        break;
+                            markedTiles.MarkColumn(match.x);
+                        return markedTiles;
                     
                     case 2: // Orange - Clear all orange
-
-                        matchedTiles = Utils.CombineBooleanTables(matchedTiles, FindSameType(newBoard, match.TileType));
-                        
-                        break;
+                        markedTiles.MarkSameType(board, match.TileType);
+                        return markedTiles;
                     
                     case 3: //Yellow = Explosion
-
-                        matchedTiles = Utils.CombineBooleanTables(matchedTiles, FindRadius(newBoard, match.x, match.y, 3));
-                        
-                        break;
+                        markedTiles.MarkRadius(match.x, match.y, 3);
+                        return markedTiles;
                 }
                 
             }
-            
-            
-            return matchedTiles;
+        
+            return markedTiles;
         }
-
-        private static List<List<bool>> FindLine(List<List<Tile>> newBoard, int line)
-        {
-            List<List<bool>> matchedTiles = new();
-            for (int y = 0; y < newBoard.Count; y++)
-            {
-                matchedTiles.Add(new List<bool>(newBoard[y].Count));
-                for (int x = 0; x < newBoard.Count; x++)
-                {
-                    matchedTiles[y].Add(y==line);
-                }
-            }
-
-            return matchedTiles;
-        }
-
-        private static List<List<bool>> FindColumn(List<List<Tile>> newBoard, int column)
-        {
-            List<List<bool>> matchedTiles = new();
-            for (int y = 0; y < newBoard.Count; y++)
-            {
-                matchedTiles.Add(new List<bool>(newBoard[y].Count));
-                for (int x = 0; x < newBoard.Count; x++)
-                {
-                    matchedTiles[y].Add(x==column);
-                }
-            }
-
-            return matchedTiles;
-        }
-
-        private static List<List<bool>> FindRadius(List<List<Tile>> newBoard, int centerX, int centerY, int radius)
-        {
-            Vector2Int centerVector = new Vector2Int(centerX, centerY);
-            List<List<bool>> matchedTiles = new();
-            for (int y = 0; y < newBoard.Count; y++)
-            {
-                matchedTiles.Add(new List<bool>(newBoard[y].Count));
-                for (int x = 0; x < newBoard.Count; x++)
-                {
-                    var dist = (new Vector2Int(x, y) - centerVector).magnitude;
-                    matchedTiles[y].Add(dist <= radius);
-                }
-            }
-
-            return matchedTiles;
-        }
-
-        private static List<List<bool>> FindSameType(List<List<Tile>> newBoard, int type)
-        {
-            List<List<bool>> matchedTiles = new();
-            for (int y = 0; y < newBoard.Count; y++)
-            {
-                matchedTiles.Add(new List<bool>(newBoard[y].Count));
-                for (int x = 0; x < newBoard.Count; x++)
-                {
-                    matchedTiles[y].Add(newBoard[y][x].Type == type);
-                }
-            }
-
-            return matchedTiles;
-        }
-
+        
         private static bool HasMatch(List<List<bool>> list)
         {
             for (int y = 0; y < list.Count; y++)
