@@ -7,6 +7,8 @@
     <list default="true" id="fb9d2257-c028-4143-a5a0-ec08e020e1ce" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Core/GameService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Core/GameService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/MatchInformation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Models/MatchInformation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/PlayerResources.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Models/PlayerResources.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,9 +19,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://D:/Projetos E Traballhos/Unity/desafio-match-3/Assets/Project/Script/Core/GameService.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Project/Script/Models/PlayerResources.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Project/Script/Views/PlayerResourcesView.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/1071a2cb0cb3433aae80a793c277a04846ac00/cc/1b248293/List`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.textmeshpro@3.0.9/Scripts/Runtime/TextMeshProUGUI.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -78,10 +78,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="24628">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="24628" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -99,6 +99,7 @@
       <updated>1756577898133</updated>
       <workItem from="1756577898134" duration="3805000" />
       <workItem from="1756582600498" duration="6498000" />
+      <workItem from="1756592378411" duration="4688000" />
     </task>
     <servers />
   </component>

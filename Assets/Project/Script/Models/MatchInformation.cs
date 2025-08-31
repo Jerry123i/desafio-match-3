@@ -29,40 +29,39 @@ namespace Gazeus.DesafioMatch3.Models
 
     public static class MatchInformationFunctions
     {
-
-        public static void AddAndCombine(this List<MatchInformation> list, MatchInformation info)
+        public static void AddAndCombine(this List<MatchInformation> list, MatchInformation newInfo)
         {
             var match = list.Find(listItem =>
             {
-                bool rightType = listItem.TileType == info.TileType;
+                bool sameType = listItem.TileType == newInfo.TileType;
                 bool aligned;
                 bool overlap;
 
-                if (info.Direction == Direction.Horizontal)
+                if (newInfo.Direction == Direction.Horizontal)
                 {
-                    aligned = listItem.y == info.y;
-                    overlap = listItem.x + listItem.Length >= info.x;
+                    aligned = listItem.y == newInfo.y;
+                    overlap = listItem.x + listItem.Length >= newInfo.x;
                 }
                 else
                 {
-                    aligned = listItem.x == info.x;
-                    overlap = listItem.y + listItem.Length >= info.y;
+                    aligned = listItem.x == newInfo.x;
+                    overlap = listItem.y + listItem.Length >= newInfo.y;
                 }
 
-                return rightType && aligned && overlap;
+                return sameType && aligned && overlap;
 
             });
 
             if (match == null)
             {
-                list.Add(info);
+                list.Add(newInfo);
                 return;
             }
             
-            if (info.Direction == Direction.Horizontal)
-                match.Length = info.x + info.Length - match.x;
+            if (newInfo.Direction == Direction.Horizontal)
+                match.Length = newInfo.x + newInfo.Length - match.x;
             else
-                match.Length = info.y + info.Length - match.y;
+                match.Length = newInfo.y + newInfo.Length - match.y;
 
         }
     }

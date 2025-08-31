@@ -272,6 +272,7 @@ namespace Gazeus.DesafioMatch3.Core
                 return matchedTiles;
 
 
+            //TODO Separar a chamada de especiais
             for (int i = 0; i < matchInformation.Count; i++)
             {
                 var match = matchInformation[i];
