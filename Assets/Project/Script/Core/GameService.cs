@@ -152,8 +152,6 @@ namespace Gazeus.DesafioMatch3.Core
 
             _boardTiles = newBoard;
 
-            GetSuggestions(_boardTiles);
-            
             return boardSequences;
 
         }
@@ -424,17 +422,18 @@ namespace Gazeus.DesafioMatch3.Core
 
             return false;
         }
-
-        public List<Vector2Int> GetSuggestions(List<List<Tile>> table)
+        
+        //Non-exhaustive list of possible tiles to move
+        public List<Vector2Int> GetSuggestions()
         {
             List<Vector2Int> suggestions = new List<Vector2Int>();
 
-            //Test middle values first
-            for (int y = 1; y < table.Count-1; y++)
+            //Checks only center tiles
+            for (int y = 1; y < _boardTiles.Count-1; y++)
             {
-                for (int x = 1; x < table[0].Count-1; x++)
+                for (int x = 1; x < _boardTiles[0].Count-1; x++)
                 {
-                    int tileType = table[y][x].Type;
+                    int tileType = _boardTiles[y][x].Type;
                     
                     CheckTPatternHorizontal(x,y);
                     CheckTPatternVertical(x,y);
@@ -443,46 +442,40 @@ namespace Gazeus.DesafioMatch3.Core
 
                 }
             }
-
-            Debug.Log("Suggestions:");
-            foreach (Vector2Int suggestion in suggestions)
-            {
-                Debug.Log(suggestion);
-            }
             
             return suggestions;
 
             void CheckTPatternHorizontal(int x, int y)
             {
-                int tileType = table[y][x].Type;
+                int tileType = _boardTiles[y][x].Type;
                 
                 if(tileType == (int)TileType.Gray)
                     return;
 
-                if (tileType == table[y][x - 1].Type)
+                if (tileType == _boardTiles[y][x - 1].Type)
                 {
-                    if(table[y+1][x+1].Type == tileType)
+                    if(_boardTiles[y+1][x+1].Type == tileType)
                         suggestions.Add(new Vector2Int(x+1,y+1));
-                    if (table[y - 1][x + 1].Type == tileType)
+                    if (_boardTiles[y - 1][x + 1].Type == tileType)
                         suggestions.Add(new Vector2Int(x+1, y-1));
 
-                    if (x + 2 < table[0].Count)
+                    if (x + 2 < _boardTiles[0].Count)
                     {
-                        if (table[y][x + 2].Type == tileType)
+                        if (_boardTiles[y][x + 2].Type == tileType)
                             suggestions.Add(new Vector2Int(x+2,y));
                     }
                 }
 
-                if (tileType == table[y][x + 1].Type)
+                if (tileType == _boardTiles[y][x + 1].Type)
                 {
-                    if(table[y+1][x-1].Type == tileType)
+                    if(_boardTiles[y+1][x-1].Type == tileType)
                         suggestions.Add(new Vector2Int(x-1,y+1));
-                    if(table[y-1][x-1].Type == tileType)
+                    if(_boardTiles[y-1][x-1].Type == tileType)
                         suggestions.Add(new Vector2Int(x-1,y-1));
 
                     if (x > 1)
                     {
-                        if(table[y][x-2].Type == tileType)
+                        if(_boardTiles[y][x-2].Type == tileType)
                             suggestions.Add(new Vector2Int(x-2,y));
                     }
                 }
@@ -490,35 +483,35 @@ namespace Gazeus.DesafioMatch3.Core
 
             void CheckTPatternVertical(int x, int y)
             {
-                int tileType = table[y][x].Type;
+                int tileType = _boardTiles[y][x].Type;
                 
                 if(tileType == (int)TileType.Gray)
                     return;
 
-                if (tileType == table[y - 1][x].Type)
+                if (tileType == _boardTiles[y - 1][x].Type)
                 {
-                    if(table[y+1][x-1].Type == tileType)
+                    if(_boardTiles[y+1][x-1].Type == tileType)
                         suggestions.Add(new Vector2Int(x-1, y+1));
-                    if(table[y+1][x+1].Type == tileType)
+                    if(_boardTiles[y+1][x+1].Type == tileType)
                         suggestions.Add(new Vector2Int(x+1,y+1));
 
-                    if (y + 2 < table.Count)
+                    if (y + 2 < _boardTiles.Count)
                     {
-                        if(table[y+2][x].Type ==tileType)
+                        if(_boardTiles[y+2][x].Type ==tileType)
                             suggestions.Add(new Vector2Int(x,y+2));
                     }
                 }
 
-                if (tileType == table[y + 1][x].Type)
+                if (tileType == _boardTiles[y + 1][x].Type)
                 {
-                    if(table[y-1][x-1].Type == tileType)
+                    if(_boardTiles[y-1][x-1].Type == tileType)
                         suggestions.Add(new Vector2Int(x-1, y-1));
-                    if(table[y-1][x+1].Type == tileType)
+                    if(_boardTiles[y-1][x+1].Type == tileType)
                         suggestions.Add(new Vector2Int(x+1,y-1));
 
                     if (y > 1)
                     {
-                        if(table[y-2][x].Type == tileType)
+                        if(_boardTiles[y-2][x].Type == tileType)
                             suggestions.Add(new Vector2Int(x,y-2));
                     }
                 }
@@ -527,31 +520,31 @@ namespace Gazeus.DesafioMatch3.Core
 
             void CheckCrossPatternHorizontal(int x, int y)
             {
-                int tileType = table[y][x - 1].Type;
+                int tileType = _boardTiles[y][x - 1].Type;
                 if(tileType == (int)TileType.Gray)
                     return;
                 
-                if(table[y][x+1].Type == tileType&&
-                   table[y+1][x].Type == tileType)
+                if(_boardTiles[y][x+1].Type == tileType&&
+                   _boardTiles[y+1][x].Type == tileType)
                     suggestions.Add(new Vector2Int(x, y+1));
                 
-                if(table[y][x+1].Type == tileType&&
-                   table[y-1][x].Type == tileType)
+                if(_boardTiles[y][x+1].Type == tileType&&
+                   _boardTiles[y-1][x].Type == tileType)
                     suggestions.Add(new Vector2Int(x, y-1));
             }
 
             void CheckCrossPatternVertical(int x, int y)
             {
-                int tileType = table[y-1][x].Type;
+                int tileType = _boardTiles[y-1][x].Type;
                 if(tileType == (int)TileType.Gray)
                     return;
                 
-                if(table[y+1][x].Type == tileType &&
-                   table[y][x-1].Type == tileType)
+                if(_boardTiles[y+1][x].Type == tileType &&
+                   _boardTiles[y][x-1].Type == tileType)
                     suggestions.Add(new Vector2Int(x-1,y));
                 
-                if(table[y+1][x].Type == tileType &&
-                   table[y][x+1].Type == tileType)
+                if(_boardTiles[y+1][x].Type == tileType &&
+                   _boardTiles[y][x+1].Type == tileType)
                     suggestions.Add(new Vector2Int(x+1,y));
                 
             }

@@ -5,6 +5,7 @@ using Gazeus.DesafioMatch3.Core;
 using Gazeus.DesafioMatch3.Models;
 using Gazeus.DesafioMatch3.Views;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Gazeus.DesafioMatch3.Controllers
 {
@@ -18,16 +19,21 @@ namespace Gazeus.DesafioMatch3.Controllers
         
         private GameService _gameEngine;
         private bool _isAnimating;
+        private bool _isShowingHint;
         private int _selectedX = -1;
         private int _selectedY = -1;
 
         private readonly int scoreMultiplier = 10;
+
+        private Tween suggestionCallTween;
         
         #region Unity
         private void Awake()
         {
             _gameEngine = new GameService();
             _boardView.TileClicked += OnTileClick;
+            
+            suggestionCallTween = DOVirtual.DelayedCall(15f, GetHint).SetLoops(-1);
         }
 
         private void OnDestroy()
@@ -123,11 +129,13 @@ namespace Gazeus.DesafioMatch3.Controllers
             
             foreach (Sequence s in sequences.Values)
                 fullSequence.Append(s);
+
+            suggestionCallTween.Pause();
             
             fullSequence.onComplete += () =>
             {
                 List<BoardSequence> result = _gameEngine.TableSlideRight();
-                AnimateBoard(result, 0, () => _isAnimating = false);
+                AnimateBoard(result, 0, OnFinishAnimating);
             };
         }
 
@@ -150,8 +158,10 @@ namespace Gazeus.DesafioMatch3.Controllers
                         bool isValid = _gameEngine.IsValidMovement(_selectedX, _selectedY, x, y);
                         if (isValid)
                         {
+                            suggestionCallTween.Pause();
                             List<BoardSequence> swapResult = _gameEngine.SwapTile(_selectedX, _selectedY, x, y);
-                            AnimateBoard(swapResult, 0, () => _isAnimating = false);
+                            AnimateBoard(swapResult, 0, OnFinishAnimating);
+                            
                         }
                         else
                         {
@@ -184,14 +194,9 @@ namespace Gazeus.DesafioMatch3.Controllers
                 return;
             
             _boardView.ClearSelectedSpotEffect();
-            
+            suggestionCallTween.Pause();
             List<BoardSequence> result = _gameEngine.DestroySingleTile(_selectedX, _selectedY);
-            AnimateBoard(result, 0, () =>
-            {
-                _isAnimating = false;
-                _selectedX = -1;
-                _selectedY = -1;
-            });
+            AnimateBoard(result, 0, OnFinishAnimating);
         }
 
         public void DestroyExplosion()
@@ -201,30 +206,54 @@ namespace Gazeus.DesafioMatch3.Controllers
             if(_selectedX<0 || _selectedY<0)
                 return;
             
+            suggestionCallTween.Restart();
+            
             _boardView.ClearSelectedSpotEffect();
+            suggestionCallTween.Pause();
             List<BoardSequence> result = _gameEngine.Explosion(_selectedX, _selectedY, 5);
-            AnimateBoard(result, 0, () =>
-            {
-                _isAnimating = false;
-                _selectedX = -1;
-                _selectedY = -1;
-            });
+            AnimateBoard(result, 0, OnFinishAnimating);
         }
 
         public void EarthquakeEffect()
         {
             if (_isAnimating) return;
             
+            suggestionCallTween.Restart();
+            
             _boardView.ClearSelectedSpotEffect();
+            suggestionCallTween.Pause();
             List<BoardSequence> result = _gameEngine.EarthQuake();
-            AnimateBoard(result, 0, () =>
-            {
-                _isAnimating = false;
-                _selectedX = -1;
-                _selectedY = -1;
-            });
+            AnimateBoard(result, 0, OnFinishAnimating);
         }
 
+        public void GetHint()
+        {
+            Debug.Log("GetHint");
+            
+            if(_isAnimating)
+                return;
+            
+            if(_isShowingHint)
+                return;
+
+            suggestionCallTween.Restart();
+            
+            _isShowingHint = true;
+            var suggestions = _gameEngine.GetSuggestions();
+            var tile = suggestions[Random.Range(0, suggestions.Count - 1)];
+            
+            _boardView.PlayTileSuggestionAnimate(tile.x, tile.y).onComplete += () => { _isShowingHint = false;};
+        }
+
+        private void OnFinishAnimating()
+        {
+            _isAnimating = false;
+            suggestionCallTween.Restart();
+            _selectedX = -1;
+            _selectedY = -1;
+            _boardView.SetTileSpotSelectedEffect(_selectedX,_selectedY);
+        }
+        
         //TODO Receber conjuntos de linhas e calcular aqui a pontuação
         private void AddPoints(int value)
         {

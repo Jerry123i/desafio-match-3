@@ -53,6 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _button: {fileID: 3397252726085345414}
   _highlightImage: {fileID: 196399312766522656}
+  _suggestionImage: {fileID: 1000845869212316082}
 --- !u!114 &3397252726085345414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,12 +185,12 @@ GameObject:
   - component: {fileID: 1825342819486643799}
   - component: {fileID: 1000845869212316082}
   m_Layer: 5
-  m_Name: HighlightSuggestion
+  m_Name: Suggestion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8358199871043560151
 RectTransform:
   m_ObjectHideFlags: 0
@@ -230,7 +231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.7772765, b: 0, a: 0.6509804}
+  m_Color: {r: 1, g: 0.7772765, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

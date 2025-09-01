@@ -139,6 +139,11 @@ namespace Gazeus.DesafioMatch3.Views
             currentlySelectedSpot.SetHighlight(true);
 
         }
+
+        public Tween PlayTileSuggestionAnimate(int x, int y)
+        {
+            return _tileSpots[y][x].AnimateSuggestionHighlight();
+        }
         
         public Tween SwapTiles(int fromX, int fromY, int toX, int toY)
         {
