@@ -78,7 +78,7 @@ namespace Gazeus.DesafioMatch3
         public static void MarkEarthquakePattern(this List<List<bool>> table)
         {
             int minSpike = 1;
-            int maxSpike = 5;
+            int maxSpike = 4;
 
             int width = table[0].Count;
             List<int> spikes = new List<int>();

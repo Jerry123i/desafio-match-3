@@ -12,6 +12,7 @@ namespace Gazeus.DesafioMatch3.Core
         private List<int> _tilesTypes;
         private int _tileCount;
 
+        //TODO juntar com regra de match
         public bool IsValidMovement(int fromX, int fromY, int toX, int toY)
         {
             List<List<Tile>> newBoard = CopyBoard(_boardTiles);
@@ -22,6 +23,9 @@ namespace Gazeus.DesafioMatch3.Core
             {
                 for (int x = 0; x < newBoard[y].Count; x++)
                 {
+                    if(newBoard[y][x].Type == (int)TileType.Gray)
+                        continue;
+                    
                     if (x > 1 &&
                         newBoard[y][x].Type == newBoard[y][x - 1].Type &&
                         newBoard[y][x - 1].Type == newBoard[y][x - 2].Type)
@@ -48,10 +52,19 @@ namespace Gazeus.DesafioMatch3.Core
 
             return _boardTiles;
         }
-        private List<BoardSequence> ModifyBoard(Func<List<List<Tile>>, List<List<Tile>>> tileManipulation, Action<List<List<bool>>> destructionParameters, bool useFindMatches)
+        private List<BoardSequence> ModifyBoard(Func<List<List<Tile>>, List<List<Tile>>> tileManipulation,
+            Action<List<List<bool>>> destructionParameters,
+            bool useFindMatches,
+            Func<List<List<Tile>>,List<AddedTileInfo>> newTilesParameters = null)
         {
             List<List<Tile>> newBoard = CopyBoard(_boardTiles);
 
+            if (newTilesParameters == null)
+                newTilesParameters = TileAdditionStandard;
+            
+            //Makes sure that any special effects that change tile addition rules only run once
+            bool specialNewTilesApplied = false; 
+            
             if(tileManipulation!=null)
                 newBoard = tileManipulation(newBoard);
 
@@ -135,24 +148,14 @@ namespace Gazeus.DesafioMatch3.Core
 
                 // Filling the board
                 List<AddedTileInfo> addedTiles = new();
-                for (int y = newBoard.Count - 1; y > -1; y--)
+
+                if (!specialNewTilesApplied)
                 {
-                    for (int x = newBoard[y].Count - 1; x > -1; x--)
-                    {
-                        if (newBoard[y][x].Type == -1)
-                        {
-                            int tileType = Random.Range(0, _tilesTypes.Count);
-                            Tile tile = newBoard[y][x];
-                            tile.Id = _tileCount++;
-                            tile.Type = _tilesTypes[tileType];
-                            addedTiles.Add(new AddedTileInfo
-                            {
-                                Position = new Vector2Int(x, y),
-                                Type = tile.Type
-                            });
-                        }
-                    }
+                    addedTiles = newTilesParameters(newBoard);
+                    specialNewTilesApplied = true;
                 }
+                else
+                    addedTiles = TileAdditionStandard(newBoard);
 
                 BoardSequence sequence = new()
                 {
@@ -185,6 +188,57 @@ namespace Gazeus.DesafioMatch3.Core
 
         }
 
+        private List<AddedTileInfo> TileAdditionStandard(List<List<Tile>> newBoard)
+        {
+            List<AddedTileInfo> addedTiles = new List<AddedTileInfo>();
+            for (int y = newBoard.Count - 1; y > -1; y--)
+            {
+                for (int x = newBoard[y].Count - 1; x > -1; x--)
+                {
+                    if (newBoard[y][x].Type == -1)
+                    {
+                        int tileType = Random.Range(0, _tilesTypes.Count);
+                        Tile tile = newBoard[y][x];
+                        tile.Id = _tileCount++;
+                        tile.Type = _tilesTypes[tileType];
+                        addedTiles.Add(new AddedTileInfo
+                        {
+                            Position = new Vector2Int(x, y),
+                            Type = tile.Type
+                        });
+                    }
+                }
+            }
+
+            return addedTiles;
+        }
+        
+        private List<AddedTileInfo> TileAdditionBlockers(List<List<Tile>> newBoard)
+        {
+            List<AddedTileInfo> addedTiles = new List<AddedTileInfo>();
+
+            for (int x = newBoard[0].Count - 1; x >= 0; x--)
+            {
+                for (int y = newBoard.Count - 1; y >= 0; y--)
+                {
+                    if (newBoard[y][x].Type == -1)
+                    {
+                        int tileType = (int)TileType.Gray;
+                        Tile tile = newBoard[y][x];
+                        tile.Id = _tileCount++;
+                        tile.Type = tileType;
+                        addedTiles.Add(new AddedTileInfo
+                        {
+                            Position = new Vector2Int(x, y),
+                            Type = tile.Type
+                        });
+                    }
+                }
+            }
+
+            return addedTiles;
+        }
+
         public List<BoardSequence> SwapTile(int fromX, int fromY, int toX, int toY)
         {
 
@@ -206,13 +260,6 @@ namespace Gazeus.DesafioMatch3.Core
                 //Swap
                 (board) =>
                 {
-                    for (int i = 0; i < board.Count; i++)
-                    {
-                        Debug.Log(board[i][board.Count-1]);
-                    }
-                    
-                    Debug.Log("-----");
-                    
                     for (int row = 0; row < board.Count; row++)
                     {
                         var first = board[row][0];
@@ -222,14 +269,6 @@ namespace Gazeus.DesafioMatch3.Core
                         }
                         board[row][board[row].Count - 1] = first;
                     }
-                    
-                    for (int i = 0; i < board.Count; i++)
-                    {
-                        Debug.Log(board[i][board.Count-1]);
-                    }
-                    
-                    Debug.Log("-----");
-                    
                     return board;
                 },
                 null,
@@ -304,7 +343,8 @@ namespace Gazeus.DesafioMatch3.Core
                 null,
                 //Destroy
                 board => board.MarkEarthquakePattern(),
-                false
+                false,
+                TileAdditionBlockers
             );
         }
 
@@ -375,6 +415,9 @@ namespace Gazeus.DesafioMatch3.Core
             {
                 for (int x = 0; x < newBoard[y].Count; x++)
                 {
+                    if (newBoard[y][x].Type == (int)TileType.Gray)
+                        continue;
+                    
                     if (x > 1 &&
                         newBoard[y][x].Type == newBoard[y][x - 1].Type &&
                         newBoard[y][x - 1].Type == newBoard[y][x - 2].Type)

@@ -6,12 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="fb9d2257-c028-4143-a5a0-ec08e020e1ce" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/PinkTile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/PinkTile.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/GrayTile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/GrayTile.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/GrayTile.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/GrayTile.prefab.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/RedTile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/RedTile.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Scenes/Gameplay.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Scenes/Gameplay.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Controllers/GameController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Controllers/GameController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/RedTile.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/RedTile.prefab.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Core/BooleanTableFunctions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Core/BooleanTableFunctions.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Core/GameService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Core/GameService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/Tile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Models/Tile.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/ScriptableObjects/TilePrefabRepository.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/ScriptableObjects/TilePrefabRepository.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +109,7 @@
       <workItem from="1756592378411" duration="4688000" />
       <workItem from="1756645458213" duration="10758000" />
       <workItem from="1756683331951" duration="1670000" />
-      <workItem from="1756726060745" duration="11773000" />
+      <workItem from="1756726060745" duration="15454000" />
     </task>
     <servers />
   </component>
@@ -135,24 +137,5 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Project/Script/Core/BooleanTableFunctions.cs</url>
-          <line>79</line>
-          <properties documentPath="D:\Projetos E Traballhos\Unity\desafio-match-3\Assets\Project\Script\Core\BooleanTableFunctions.cs" containingFunctionPresentation="Method 'MarkEarthquakePattern'">
-            <startOffsets>
-              <option value="2492" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2509" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
