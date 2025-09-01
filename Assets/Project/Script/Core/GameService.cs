@@ -446,23 +446,23 @@ namespace Gazeus.DesafioMatch3.Core
                 if(match.Length < 4)
                     continue;
         
-                switch (match.TileType)
+                switch ((TileType)match.TileType)
                 {
-                    case 0: // Blue - Line Clear
+                    case TileType.Blue: // Blue - Line Clear
                         if (match.Direction == Direction.Horizontal)
                             markedTiles.MarkLine(match.y);
                         return markedTiles; 
                     
-                    case 1: // Green - Column Clear
+                    case TileType.Green: // Green - Column Clear
                         if (match.Direction == Direction.Vertical)
                             markedTiles.MarkColumn(match.x);
                         return markedTiles;
                     
-                    case 2: // Orange - Clear all orange
+                    case TileType.Orange: // Orange - Clear all orange
                         markedTiles.MarkSameType(board, match.TileType);
                         return markedTiles;
                     
-                    case 3: //Yellow = Explosion
+                    case TileType.Yellow: //Yellow = Explosion
                         markedTiles.MarkRadius(match.x, match.y, 3);
                         return markedTiles;
                 }
