@@ -201,6 +201,83 @@ namespace Gazeus.DesafioMatch3.Core
             );
         }
 
+        public List<BoardSequence> TableSlideLeft()
+        {
+            return ModifyBoard(
+                //Swap
+                (board) =>
+                {
+                    for (int i = 0; i < board.Count; i++)
+                    {
+                        Debug.Log(board[i][board.Count-1]);
+                    }
+                    
+                    Debug.Log("-----");
+                    
+                    for (int row = 0; row < board.Count; row++)
+                    {
+                        var first = board[row][0];
+                        for (int col = 0; col < board[row].Count - 1; col++)
+                        {
+                            board[row][col] = board[row][col + 1];
+                        }
+                        board[row][board[row].Count - 1] = first;
+                    }
+                    
+                    for (int i = 0; i < board.Count; i++)
+                    {
+                        Debug.Log(board[i][board.Count-1]);
+                    }
+                    
+                    Debug.Log("-----");
+                    
+                    return board;
+                },
+                null,
+                true
+            );
+        }
+        
+        public List<BoardSequence> TableSlideRight()
+        {
+            return ModifyBoard(
+                //Swap
+                (board) =>
+                {
+                    for (int i = 0; i < board.Count; i++)
+                    {
+                        Debug.Log(board[i][board.Count-1]);
+                    }
+                    
+                    Debug.Log("-----");
+                    
+                    for (int row = 0; row < board.Count; row++)
+                    {
+                        int lastIndex = board[row].Count - 1;
+                        var last = board[row][lastIndex];
+                        
+                        for (int col = lastIndex; col > 0; col--)
+                        {
+                            //Debug.Log($"{row},{col} -> {row},{col-1}");
+                            board[row][col] = board[row][col - 1];
+                        }
+                        board[row][0] = last;
+                    }
+                    
+                    for (int i = 0; i < board.Count; i++)
+                    {
+                        Debug.Log(board[i][board.Count-1]);
+                    }
+                    
+                    Debug.Log("-----");
+                    
+                    return board;
+                },
+                null,
+                true
+            );
+        }
+
         private static List<List<Tile>> CopyBoard(List<List<Tile>> boardToCopy)
         {
             List<List<Tile>> newBoard = new(boardToCopy.Count);

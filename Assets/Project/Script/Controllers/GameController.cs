@@ -63,6 +63,74 @@ namespace Gazeus.DesafioMatch3.Controllers
             }
         }
 
+        public void TilesSlideLeft()
+        {
+            if (_isAnimating) return;
+
+            _isAnimating = true;
+
+            Sequence fullSequence = DOTween.Sequence();
+
+            Dictionary<int, Sequence> sequences = new Dictionary<int, Sequence>();
+            
+            for (int i = 0; i < _boardHeight; i++)
+            {
+                for (int j = 0; j < _boardWidth; j++)
+                {
+                    sequences.TryAdd(j, DOTween.Sequence());
+                    sequences.TryGetValue(j, out Sequence partialSequence);
+                    
+                    if(j == _boardWidth-1)
+                        continue;
+                    
+                    partialSequence.Join(_boardView.SwapTiles(j, i, j + 1, i));
+                }
+            }
+            
+            foreach (Sequence s in sequences.Values)
+                fullSequence.Append(s);
+            
+            fullSequence.onComplete += () =>
+            {
+                List<BoardSequence> result = _gameEngine.TableSlideLeft();
+                AnimateBoard(result, 0, () => _isAnimating = false);
+            };
+        }
+        
+        public void TilesSlideRight()
+        {
+            if (_isAnimating) return;
+
+            _isAnimating = true;
+
+            Sequence fullSequence = DOTween.Sequence();
+
+            Dictionary<int, Sequence> sequences = new Dictionary<int, Sequence>();
+            
+            for (int i = _boardHeight - 1; i >= 0; i--)
+            {
+                for (int j = _boardWidth - 1; j >= 0; j--)
+                {
+                    sequences.TryAdd(j, DOTween.Sequence());
+                    sequences.TryGetValue(j, out Sequence partialSequence);
+                    
+                    if(j == 0)
+                        continue;
+                    
+                    partialSequence.Join(_boardView.SwapTiles(j, i, j - 1, i));
+                }
+            }
+            
+            foreach (Sequence s in sequences.Values)
+                fullSequence.Append(s);
+            
+            fullSequence.onComplete += () =>
+            {
+                List<BoardSequence> result = _gameEngine.TableSlideRight();
+                AnimateBoard(result, 0, () => _isAnimating = false);
+            };
+        }
+
         private void OnTileClick(int x, int y)
         {
             if (_isAnimating) return;
