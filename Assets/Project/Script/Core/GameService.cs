@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Gazeus.DesafioMatch3.Models;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -11,39 +12,6 @@ namespace Gazeus.DesafioMatch3.Core
         private List<List<Tile>> _boardTiles;
         private List<int> _tilesTypes;
         private int _tileCount;
-
-        //TODO juntar com regra de match
-        public bool IsValidMovement(int fromX, int fromY, int toX, int toY)
-        {
-            List<List<Tile>> newBoard = CopyBoard(_boardTiles);
-
-            (newBoard[toY][toX], newBoard[fromY][fromX]) = (newBoard[fromY][fromX], newBoard[toY][toX]);
-
-            for (int y = 0; y < newBoard.Count; y++)
-            {
-                for (int x = 0; x < newBoard[y].Count; x++)
-                {
-                    if(newBoard[y][x].Type == (int)TileType.Gray)
-                        continue;
-                    
-                    if (x > 1 &&
-                        newBoard[y][x].Type == newBoard[y][x - 1].Type &&
-                        newBoard[y][x - 1].Type == newBoard[y][x - 2].Type)
-                    {
-                        return true;
-                    }
-
-                    if (y > 1 &&
-                        newBoard[y][x].Type == newBoard[y - 1][x].Type &&
-                        newBoard[y - 1][x].Type == newBoard[y - 2][x].Type)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
 
         public List<List<Tile>> StartGame(int boardWidth, int boardHeight)
         {
@@ -184,6 +152,8 @@ namespace Gazeus.DesafioMatch3.Core
 
             _boardTiles = newBoard;
 
+            GetSuggestions(_boardTiles);
+            
             return boardSequences;
 
         }
@@ -393,7 +363,7 @@ namespace Gazeus.DesafioMatch3.Core
             return board;
         }
 
-        private static List<MatchInformation> FindMatches(List<List<Tile>> newBoard, bool applySpecials = false)
+        private static List<MatchInformation> FindMatches(List<List<Tile>> newBoard)
         {
             List<MatchInformation> matchInformation = new();
             
@@ -421,6 +391,171 @@ namespace Gazeus.DesafioMatch3.Core
             }
 
             return matchInformation;
+        }
+        
+        public bool IsValidMovement(int fromX, int fromY, int toX, int toY)
+        {
+            List<List<Tile>> newBoard = CopyBoard(_boardTiles);
+
+            (newBoard[toY][toX], newBoard[fromY][fromX]) = (newBoard[fromY][fromX], newBoard[toY][toX]);
+
+            for (int y = 0; y < newBoard.Count; y++)
+            {
+                for (int x = 0; x < newBoard[y].Count; x++)
+                {
+                    if(newBoard[y][x].Type == (int)TileType.Gray)
+                        continue;
+                    
+                    if (x > 1 &&
+                        newBoard[y][x].Type == newBoard[y][x - 1].Type &&
+                        newBoard[y][x - 1].Type == newBoard[y][x - 2].Type)
+                    {
+                        return true;
+                    }
+
+                    if (y > 1 &&
+                        newBoard[y][x].Type == newBoard[y - 1][x].Type &&
+                        newBoard[y - 1][x].Type == newBoard[y - 2][x].Type)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public List<Vector2Int> GetSuggestions(List<List<Tile>> table)
+        {
+            List<Vector2Int> suggestions = new List<Vector2Int>();
+
+            //Test middle values first
+            for (int y = 1; y < table.Count-1; y++)
+            {
+                for (int x = 1; x < table[0].Count-1; x++)
+                {
+                    int tileType = table[y][x].Type;
+                    
+                    CheckTPatternHorizontal(x,y);
+                    CheckTPatternVertical(x,y);
+                    CheckCrossPatternHorizontal(x,y);
+                    CheckCrossPatternVertical(x,y);
+
+                }
+            }
+
+            Debug.Log("Suggestions:");
+            foreach (Vector2Int suggestion in suggestions)
+            {
+                Debug.Log(suggestion);
+            }
+            
+            return suggestions;
+
+            void CheckTPatternHorizontal(int x, int y)
+            {
+                int tileType = table[y][x].Type;
+                
+                if(tileType == (int)TileType.Gray)
+                    return;
+
+                if (tileType == table[y][x - 1].Type)
+                {
+                    if(table[y+1][x+1].Type == tileType)
+                        suggestions.Add(new Vector2Int(x+1,y+1));
+                    if (table[y - 1][x + 1].Type == tileType)
+                        suggestions.Add(new Vector2Int(x+1, y-1));
+
+                    if (x + 2 < table[0].Count)
+                    {
+                        if (table[y][x + 2].Type == tileType)
+                            suggestions.Add(new Vector2Int(x+2,y));
+                    }
+                }
+
+                if (tileType == table[y][x + 1].Type)
+                {
+                    if(table[y+1][x-1].Type == tileType)
+                        suggestions.Add(new Vector2Int(x-1,y+1));
+                    if(table[y-1][x-1].Type == tileType)
+                        suggestions.Add(new Vector2Int(x-1,y-1));
+
+                    if (x > 1)
+                    {
+                        if(table[y][x-2].Type == tileType)
+                            suggestions.Add(new Vector2Int(x-2,y));
+                    }
+                }
+            }
+
+            void CheckTPatternVertical(int x, int y)
+            {
+                int tileType = table[y][x].Type;
+                
+                if(tileType == (int)TileType.Gray)
+                    return;
+
+                if (tileType == table[y - 1][x].Type)
+                {
+                    if(table[y+1][x-1].Type == tileType)
+                        suggestions.Add(new Vector2Int(x-1, y+1));
+                    if(table[y+1][x+1].Type == tileType)
+                        suggestions.Add(new Vector2Int(x+1,y+1));
+
+                    if (y + 2 < table.Count)
+                    {
+                        if(table[y+2][x].Type ==tileType)
+                            suggestions.Add(new Vector2Int(x,y+2));
+                    }
+                }
+
+                if (tileType == table[y + 1][x].Type)
+                {
+                    if(table[y-1][x-1].Type == tileType)
+                        suggestions.Add(new Vector2Int(x-1, y-1));
+                    if(table[y-1][x+1].Type == tileType)
+                        suggestions.Add(new Vector2Int(x+1,y-1));
+
+                    if (y > 1)
+                    {
+                        if(table[y-2][x].Type == tileType)
+                            suggestions.Add(new Vector2Int(x,y-2));
+                    }
+                }
+                
+            }
+
+            void CheckCrossPatternHorizontal(int x, int y)
+            {
+                int tileType = table[y][x - 1].Type;
+                if(tileType == (int)TileType.Gray)
+                    return;
+                
+                if(table[y][x+1].Type == tileType&&
+                   table[y+1][x].Type == tileType)
+                    suggestions.Add(new Vector2Int(x, y+1));
+                
+                if(table[y][x+1].Type == tileType&&
+                   table[y-1][x].Type == tileType)
+                    suggestions.Add(new Vector2Int(x, y-1));
+            }
+
+            void CheckCrossPatternVertical(int x, int y)
+            {
+                int tileType = table[y-1][x].Type;
+                if(tileType == (int)TileType.Gray)
+                    return;
+                
+                if(table[y+1][x].Type == tileType &&
+                   table[y][x-1].Type == tileType)
+                    suggestions.Add(new Vector2Int(x-1,y));
+                
+                if(table[y+1][x].Type == tileType &&
+                   table[y][x+1].Type == tileType)
+                    suggestions.Add(new Vector2Int(x+1,y));
+                
+            }
+            
         }
 
         private static List<List<bool>> ApplySpecials(List<List<Tile>> board, List<MatchInformation> matchInformation, List<List<bool>> markedTiles)
@@ -458,20 +593,5 @@ namespace Gazeus.DesafioMatch3.Core
             return markedTiles;
         }
         
-        private static bool HasMatch(List<List<bool>> list)
-        {
-            for (int y = 0; y < list.Count; y++)
-            {
-                for (int x = 0; x < list[y].Count; x++)
-                {
-                    if (list[y][x])
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
     }
 }
