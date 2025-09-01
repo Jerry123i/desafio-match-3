@@ -176,6 +176,41 @@ namespace Gazeus.DesafioMatch3.Controllers
             
         }
 
+        public void DestroySelectedTile()
+        {
+            if (_isAnimating) return;
+            
+            if(_selectedX<0 || _selectedY<0)
+                return;
+            
+            _boardView.ClearSelectedSpotEffect();
+            
+            List<BoardSequence> result = _gameEngine.DestroySingleTile(_selectedX, _selectedY);
+            AnimateBoard(result, 0, () =>
+            {
+                _isAnimating = false;
+                _selectedX = -1;
+                _selectedY = -1;
+            });
+        }
+
+        public void DestroyExplosion()
+        {
+            if (_isAnimating) return;
+            
+            if(_selectedX<0 || _selectedY<0)
+                return;
+            
+            _boardView.ClearSelectedSpotEffect();
+            List<BoardSequence> result = _gameEngine.Explosion(_selectedX, _selectedY, 5);
+            AnimateBoard(result, 0, () =>
+            {
+                _isAnimating = false;
+                _selectedX = -1;
+                _selectedY = -1;
+            });
+        }
+
         //TODO Receber conjuntos de linhas e calcular aqui a pontuação
         private void AddPoints(int value)
         {

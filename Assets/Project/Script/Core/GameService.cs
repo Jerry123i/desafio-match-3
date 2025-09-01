@@ -164,7 +164,6 @@ namespace Gazeus.DesafioMatch3.Core
                 
                 tilesToDestroy.Clear();
                 
-                //TODO deixar salvo um board falso para copiar
                 for (int y = 0; y < newBoard.Count; y++)
                 {
                     tilesToDestroy.Add(new List<bool>(newBoard[y].Count));
@@ -276,6 +275,26 @@ namespace Gazeus.DesafioMatch3.Core
                 null,
                 true
             );
+        }
+
+        public List<BoardSequence> DestroySingleTile(int x, int y)
+        {
+            return ModifyBoard(
+                //Swap
+                null,
+                //Destroy
+                board => board[y][x] = true,
+                false);
+        }
+
+        public List<BoardSequence> Explosion(int x, int y, int radius)
+        {
+            return ModifyBoard(
+                //Swap
+                null,
+                //Destroy
+                board => board.MarkRadius(x, y, radius),
+                false);
         }
 
         private static List<List<Tile>> CopyBoard(List<List<Tile>> boardToCopy)
