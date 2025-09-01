@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb9d2257-c028-4143-a5a0-ec08e020e1ce" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/GrayTile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/GrayTile.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/GrayTile.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/GrayTile.prefab.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/RedTile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/RedTile.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/RedTile.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/RedTile.prefab.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Core/BooleanTableFunctions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Core/BooleanTableFunctions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Core/GameService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Core/GameService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/Tile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Models/Tile.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/ScriptableObjects/TilePrefabRepository.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/ScriptableObjects/TilePrefabRepository.asset" afterDir="false" />
-    </list>
+    <list default="true" id="fb9d2257-c028-4143-a5a0-ec08e020e1ce" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

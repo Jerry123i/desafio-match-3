@@ -282,13 +282,6 @@ namespace Gazeus.DesafioMatch3.Core
                 //Swap
                 (board) =>
                 {
-                    for (int i = 0; i < board.Count; i++)
-                    {
-                        Debug.Log(board[i][board.Count-1]);
-                    }
-                    
-                    Debug.Log("-----");
-                    
                     for (int row = 0; row < board.Count; row++)
                     {
                         int lastIndex = board[row].Count - 1;
@@ -301,13 +294,6 @@ namespace Gazeus.DesafioMatch3.Core
                         }
                         board[row][0] = last;
                     }
-                    
-                    for (int i = 0; i < board.Count; i++)
-                    {
-                        Debug.Log(board[i][board.Count-1]);
-                    }
-                    
-                    Debug.Log("-----");
                     
                     return board;
                 },
