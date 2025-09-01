@@ -74,6 +74,44 @@ namespace Gazeus.DesafioMatch3
             }
         }
 
+        //Effect for a specific item use
+        public static void MarkEarthquakePattern(this List<List<bool>> table)
+        {
+            int minSpike = 1;
+            int maxSpike = 5;
+
+            int width = table[0].Count;
+            List<int> spikes = new List<int>();
+
+            for (int i = 0; i < width; i++)
+            {
+                int value = Random.Range(minSpike, maxSpike + 1);
+
+                if (i == 0)
+                {
+                    spikes.Add(value);
+                    continue;
+                }
+                    
+                    
+                while (value==spikes[i-1])
+                    value = Random.Range(minSpike, maxSpike + 1);
+                
+                spikes.Add(value);
+            }
+
+            int height = table.Count;
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < table[0].Count; x++)
+                {
+                    if (height-y <= spikes[x])
+                        table[y][x] = true;
+                }
+            }
+
+        }
+
         public static void Clear(this List<List<bool>> table)
         {
             for (int y = 0; y < table.Count; y++)

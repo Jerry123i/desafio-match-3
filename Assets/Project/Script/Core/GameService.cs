@@ -297,6 +297,17 @@ namespace Gazeus.DesafioMatch3.Core
                 false);
         }
 
+        public List<BoardSequence> EarthQuake()
+        {
+            return ModifyBoard(
+                //Swap
+                null,
+                //Destroy
+                board => board.MarkEarthquakePattern(),
+                false
+            );
+        }
+
         private static List<List<Tile>> CopyBoard(List<List<Tile>> boardToCopy)
         {
             List<List<Tile>> newBoard = new(boardToCopy.Count);

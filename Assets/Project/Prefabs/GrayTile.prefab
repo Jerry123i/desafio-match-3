@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6409781313207279389
+--- !u!1001 &1887119929706675608
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -9,28 +9,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5801399917749186803, guid: a6fb14bf42a1f2d46ab2f40ba89df970, type: 3}
-      propertyPath: m_Type
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5801399917749186803, guid: a6fb14bf42a1f2d46ab2f40ba89df970, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: e1b2f201ef7d4c142b8cc6a8d33376d5, type: 3}
-    - target: {fileID: 5801399917749186803, guid: a6fb14bf42a1f2d46ab2f40ba89df970, type: 3}
       propertyPath: m_Color.b
-      value: 0.8117224
+      value: 0.08159998
       objectReference: {fileID: 0}
     - target: {fileID: 5801399917749186803, guid: a6fb14bf42a1f2d46ab2f40ba89df970, type: 3}
       propertyPath: m_Color.g
-      value: 0.455672
+      value: 0.08159998
       objectReference: {fileID: 0}
     - target: {fileID: 5801399917749186803, guid: a6fb14bf42a1f2d46ab2f40ba89df970, type: 3}
       propertyPath: m_Color.r
-      value: 0.824
+      value: 0.96
       objectReference: {fileID: 0}
     - target: {fileID: 6588062894895293356, guid: a6fb14bf42a1f2d46ab2f40ba89df970, type: 3}
       propertyPath: m_Name
-      value: PinkTile
+      value: _RedTile
       objectReference: {fileID: 0}
     - target: {fileID: 8253062065937978491, guid: a6fb14bf42a1f2d46ab2f40ba89df970, type: 3}
       propertyPath: m_Pivot.x
@@ -114,7 +106,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9015394530975744411, guid: a6fb14bf42a1f2d46ab2f40ba89df970, type: 3}
       propertyPath: m_Color.b
-      value: 0.6156863
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9015394530975744411, guid: a6fb14bf42a1f2d46ab2f40ba89df970, type: 3}
       propertyPath: m_Color.g
@@ -122,7 +114,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9015394530975744411, guid: a6fb14bf42a1f2d46ab2f40ba89df970, type: 3}
       propertyPath: m_Color.r
-      value: 0.7647059
+      value: 0.69803923
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

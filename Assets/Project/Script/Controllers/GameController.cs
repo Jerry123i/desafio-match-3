@@ -211,6 +211,20 @@ namespace Gazeus.DesafioMatch3.Controllers
             });
         }
 
+        public void EarthquakeEffect()
+        {
+            if (_isAnimating) return;
+            
+            _boardView.ClearSelectedSpotEffect();
+            List<BoardSequence> result = _gameEngine.EarthQuake();
+            AnimateBoard(result, 0, () =>
+            {
+                _isAnimating = false;
+                _selectedX = -1;
+                _selectedY = -1;
+            });
+        }
+
         //TODO Receber conjuntos de linhas e calcular aqui a pontuação
         private void AddPoints(int value)
         {
