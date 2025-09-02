@@ -1,8 +1,10 @@
-﻿namespace Gazeus.DesafioMatch3.Models
+﻿using System;
+
+namespace Gazeus.DesafioMatch3.Models
 {
     public enum TileType {Blue, Green, Orange, Yellow, Pink, Purple, Red, Gray}
     
-    public class Tile
+    public class Tile : ICloneable
     {
         public int Id { get; set; }
         public int Type { get; set; }
@@ -30,6 +32,11 @@
                 default:
                     return $"Tile {Id}";
             }
+        }
+
+        public object Clone()
+        {
+            return new Tile { Type = this.Type, Id = this.Id };
         }
     }
 }

@@ -71,7 +71,7 @@ namespace Gazeus.DesafioMatch3.Models
 
         }
 
-        public static void MarkMatches(this List<List<bool>> tileBoard, List<MatchInformation> matches)
+        public static void MarkMatches(this Table<bool> tileBoard, List<MatchInformation> matches)
         {
             for (int i = 0; i < matches.Count; i++)
             {
@@ -79,9 +79,9 @@ namespace Gazeus.DesafioMatch3.Models
                 for (int j = 0; j < match.Length; j++)
                 {
                     if (match.Direction == Direction.Horizontal)
-                        tileBoard[match.y][match.x + j] = true;
+                        tileBoard[match.x + j,match.y] = true;
                     else
-                        tileBoard[match.y + j][match.x] = true;
+                        tileBoard[match.x,match.y + j] = true;
                 }
                 
             }

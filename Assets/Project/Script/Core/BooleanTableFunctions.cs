@@ -30,60 +30,59 @@ namespace Gazeus.DesafioMatch3
             return newTable;
         }
         
-        public static void MarkLine(this List<List<bool>> table, int line)
+        public static void MarkLine(this Table<bool> table, int line)
         {
-            for (int i = 0; i < table[0].Count; i++)
+            for (int i = 0; i < table.Width; i++)
             {
-                table[line][i] = true;
+                table[i,line] = true;
             }
         }
 
-        public static void MarkColumn(this List<List<bool>> table, int column)
+        public static void MarkColumn(this Table<bool> table, int column)
         {
-            for (int i = 0; i < table.Count; i++)
+            for (int i = 0; i < table.Height; i++)
             {
-                table[i][column] = true;
+                table[column,i] = true;
             }
         }
 
-        public static void MarkRadius(this List<List<bool>> table, int centerX, int centerY, int radius)
+        public static void MarkRadius(this Table<bool> table, int centerX, int centerY, int radius)
         {
             Vector2Int centerVector = new Vector2Int(centerX, centerY);
             
-            for (int y = 0; y < table.Count; y++)
+            for (int y = 0; y < table.Height; y++)
             {
-                for (int x = 0; x < table[0].Count; x++)
+                for (int x = 0; x < table.Width; x++)
                 {
                     var dist = (new Vector2Int(x, y) - centerVector).magnitude;
                     if (dist <= radius)
-                        table[y][x] = true;
+                        table[x,y] = true;
                 }
             }
 
         }
 
-        public static void MarkSameType(this List<List<bool>> table, List<List<Tile>> referenceBoard, int type)
+        public static void MarkSameType(this Table<bool> table, Table<Tile> referenceBoard, int type)
         {
-            for (int y = 0; y < referenceBoard.Count; y++)
+            for (int y = 0; y < referenceBoard.Height; y++)
             {
-                for (int x = 0; x < referenceBoard.Count; x++)
+                for (int x = 0; x < referenceBoard.Width; x++)
                 {
-                    if (referenceBoard[y][x].Type == type)
-                        table[y][x] = true;
+                    if (referenceBoard[x,y].Type == type)
+                        table[x,y] = true;
                 }
             }
         }
 
         //Effect for a specific item use
-        public static void MarkEarthquakePattern(this List<List<bool>> table)
+        public static void MarkEarthquakePattern(this Table<bool> table)
         {
             int minSpike = 1;
             int maxSpike = 4;
 
-            int width = table[0].Count;
             List<int> spikes = new List<int>();
 
-            for (int i = 0; i < width; i++)
+            for (int i = 0; i < table.Width; i++)
             {
                 int value = Random.Range(minSpike, maxSpike + 1);
 
@@ -100,25 +99,24 @@ namespace Gazeus.DesafioMatch3
                 spikes.Add(value);
             }
 
-            int height = table.Count;
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < table.Height; y++)
             {
-                for (int x = 0; x < table[0].Count; x++)
+                for (int x = 0; x < table.Width; x++)
                 {
-                    if (height-y <= spikes[x])
-                        table[y][x] = true;
+                    if (table.Height-y <= spikes[x])
+                        table[x,y] = true;
                 }
             }
 
         }
 
-        public static void Clear(this List<List<bool>> table)
+        public static void Clear(this Table<bool> table)
         {
-            for (int y = 0; y < table.Count; y++)
+            for (int y = 0; y < table.Height; y++)
             {
-                for (int x = 0; x < table.Count; x++)
+                for (int x = 0; x < table.Width; x++)
                 {
-                    table[y][x] = false;
+                    table[x,y] = false;
                 }
             }
         }
