@@ -40,18 +40,7 @@ namespace Gazeus.DesafioMatch3.Core
             List<BoardSequence> boardSequences = new();
             List<MatchInformation> matchInformation = new();
 
-            switch (_gameMode)
-            {
-                case GameMode.SquareMatch:
-                    matchInformation = FindMatchesSquares(newBoard);
-                    break;
-                
-                case GameMode.Standard:
-                default:
-                    matchInformation = FindMatchesLines(newBoard);
-                    break;
-            }
-            
+            matchInformation = FindMatches(newBoard);
 
             Table<bool> tilesToDestroy = new Table<bool>(newBoard.Width, newBoard.Height);
 
@@ -140,18 +129,7 @@ namespace Gazeus.DesafioMatch3.Core
                 
                 tilesToDestroy.Clear();
 
-
-                switch (_gameMode)
-                {
-                    case GameMode.SquareMatch:
-                        matchInformation = FindMatchesSquares(newBoard);
-                        break;
-                    
-                    case GameMode.Standard:
-                    default:
-                        matchInformation = FindMatchesLines(newBoard);
-                        break;
-                }
+                matchInformation = FindMatches(newBoard);                
                 
                 tilesToDestroy.MarkMatches(matchInformation);
                 tilesToDestroy = ApplySpecials(newBoard, matchInformation, tilesToDestroy);
@@ -348,129 +326,105 @@ namespace Gazeus.DesafioMatch3.Core
 
             return board;
         }
-
-        private static List<MatchInformation> FindMatchesLines(Table<Tile> board)
+        
+        private void ScanForLineMatches(Table<Tile> board, Action<MatchInformation> onMatchFound, bool stopAfterMatch)
         {
-            List<MatchInformation> matchInformation = new();
-            
             for (int y = 0; y < board.Height; y++)
             {
                 for (int x = 0; x < board.Width; x++)
                 {
-                    if (board[x,y].Type == (int)TileType.Gray)
-                        continue;
-                    
+                    var tileType = board[x, y].Type;
+                    if (tileType == (int)TileType.Gray) continue;
+
                     if (x > 1 &&
-                        board[x,y].Type == board[x-1,y].Type &&
-                        board[x - 1,y].Type == board[x - 2,y].Type)
+                        tileType == board[x - 1, y].Type &&
+                        tileType == board[x - 2, y].Type)
                     {
-                        matchInformation.AddAndCombine(new MatchInformation(Direction.Horizontal, x-2,y,3, board[x,y].Type));
+                        onMatchFound(new MatchInformation(Direction.Horizontal, x - 2, y, 3, tileType));
+                        if(stopAfterMatch)
+                            return;
                     }
 
                     if (y > 1 &&
-                        board[x,y].Type == board[x,y - 1].Type &&
-                        board[x,y - 1].Type == board[x,y - 2].Type)
+                        tileType == board[x, y - 1].Type &&
+                        tileType == board[x, y - 2].Type)
                     {
-                        matchInformation.AddAndCombine(new MatchInformation(Direction.Vertical, x,y-2,3, board[x,y].Type));
+                        onMatchFound(new MatchInformation(Direction.Vertical, x, y - 2, 3, tileType));
+                        if(stopAfterMatch)
+                            return;
                     }
                 }
             }
-
-            return matchInformation;
         }
 
-        private static List<MatchInformation> FindMatchesSquares(Table<Tile> board)
+        private void ScanForSquareMatches(Table<Tile> board, Action<MatchInformation> onMatchFound, bool stopAfterMatch)
         {
-            List<MatchInformation> matchInformation = new();
-
             for (int y = 1; y < board.Height; y++)
             {
                 for (int x = 1; x < board.Width; x++)
                 {
                     var tileType = board[x, y].Type;
-                    
-                    if(tileType == (int)TileType.Gray)
-                        continue;
+                    if (tileType == (int)TileType.Gray) continue;
 
                     if (tileType == board[x - 1, y].Type &&
-                        tileType == board[x,y-1].Type &&
-                        tileType == board[x-1,y-1].Type)
-                        matchInformation.Add(new MatchInformation(Direction.Square,x,y,2,tileType));
+                        tileType == board[x, y - 1].Type &&
+                        tileType == board[x - 1, y - 1].Type)
+                    {
+                        onMatchFound(new MatchInformation(Direction.Square, x, y, 2, tileType));
+                        if(stopAfterMatch)
+                            return;
+                    }
                 }
             }
+        }
 
-            return matchInformation;
+        private List<MatchInformation> FindMatches(Table<Tile> board)
+        {
+            List<MatchInformation> matches = new();
+
+            switch (_gameMode)
+            {
+                case GameMode.SquareMatch:
+                    ScanForSquareMatches(board,
+                        match => matches.AddAndCombine(match),
+                        false);
+                    break;
+                
+                case GameMode.Standard:
+                default:
+                    ScanForLineMatches(board,
+                        match=>matches.AddAndCombine(match),
+                        false);
+                    break;
+            }
+
+            return matches;
 
         }
 
         public bool IsValidMovement(int fromX, int fromY, int toX, int toY)
         {
+            Table<Tile> newBoard = Table<Tile>.Clone(_boardTiles);
+            (newBoard[toX, toY], newBoard[fromX, fromY]) = (newBoard[fromX, fromY], newBoard[toX, toY]);
+            
+            bool found = false;
+            
             switch (_gameMode)
             {
                 case GameMode.SquareMatch:
-                    return IsValidMovementSquare(fromX, fromY, toX, toY);
-                
+                    ScanForSquareMatches(newBoard,
+                        a=>found=true,
+                        true);
+                    break;                
                 case GameMode.Standard:
                 default:
-                    return IsValidMovementLinesMatch(fromX, fromY, toX, toY);
-            }
-        }
-        
-        private bool IsValidMovementLinesMatch(int fromX, int fromY, int toX, int toY)
-        {
-            Table<Tile> newBoard = Table<Tile>.Clone(_boardTiles);
-
-            (newBoard[toX,toY], newBoard[fromX,fromY]) = (newBoard[fromX,fromY], newBoard[toX,toY]);
-
-            for (int y = 0; y < newBoard.Height; y++)
-            {
-                for (int x = 0; x < newBoard.Width; x++)
-                {
-                    if(newBoard[x,y].Type == (int)TileType.Gray)
-                        continue;
-                    
-                    if (x > 1 &&
-                        newBoard[x,y].Type == newBoard[x - 1,y].Type &&
-                        newBoard[x - 1,y].Type == newBoard[x - 2,y].Type)
-                    {
-                        return true;
-                    }
-
-                    if (y > 1 &&
-                        newBoard[x,y].Type == newBoard[x,y - 1].Type &&
-                        newBoard[x,y - 1].Type == newBoard[x,y - 2].Type)
-                    {
-                        return true;
-                    }
-                }
+                    ScanForLineMatches(newBoard,
+                        a=>found=true,
+                        true);
+                    break;
             }
 
-            return false;
-        }
-
-        public bool IsValidMovementSquare(int fromX, int fromY, int toX, int toY)
-        {
-            Table<Tile> newBoard = Table<Tile>.Clone(_boardTiles);
-
-            (newBoard[toX,toY], newBoard[fromX,fromY]) = (newBoard[fromX,fromY], newBoard[toX,toY]);
-
-            for (int y = 1; y < newBoard.Height; y++)
-            {
-                for (int x = 1; x < newBoard.Width; x++)
-                {
-                    var tileType = newBoard[x, y].Type;
-                    
-                    if(tileType == (int)TileType.Gray)
-                        continue;
-
-                    if (tileType == newBoard[x - 1, y].Type &&
-                        tileType == newBoard[x, y - 1].Type &&
-                        tileType == newBoard[x - 1, y - 1].Type)
-                        return true;
-                }
-            }
-
-            return false;
+            return found;
         }
 
         public List<Vector2Int> GetSuggestions()

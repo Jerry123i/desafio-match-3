@@ -234,10 +234,8 @@ namespace Gazeus.DesafioMatch3.Controllers
             if (_isAnimating)
                 return;
 
-
             if (_isShowingHint)
                 return;
-                
 
             suggestionCallTween.Restart();
             
