@@ -155,6 +155,7 @@ namespace Gazeus.DesafioMatch3.Controllers
                     _isAnimating = true;
                     _boardView.SwapTiles(_selectedX, _selectedY, x, y).onComplete += () =>
                     {
+                        //bool isValid = _gameEngine.IsValidMovementSquare(_selectedX, _selectedY, x, y);
                         bool isValid = _gameEngine.IsValidMovement(_selectedX, _selectedY, x, y);
                         if (isValid)
                         {
@@ -239,7 +240,12 @@ namespace Gazeus.DesafioMatch3.Controllers
             suggestionCallTween.Restart();
             
             _isShowingHint = true;
-            var suggestions = _gameEngine.GetSuggestions();
+            //var suggestions = _gameEngine.GetSuggestions();
+            var suggestions = _gameEngine.GetSuggestionSquare();
+            
+            if(suggestions.Count == 0)
+                return;
+            
             var tile = suggestions[Random.Range(0, suggestions.Count - 1)];
             
             _boardView.PlayTileSuggestionAnimate(tile.x, tile.y).onComplete += () => { _isShowingHint = false;};

@@ -38,7 +38,8 @@ namespace Gazeus.DesafioMatch3.Core
 
             List<BoardSequence> boardSequences = new();
             List<MatchInformation> matchInformation = new();
-            matchInformation = FindMatches(newBoard);
+            //matchInformation = FindMatchesLines(newBoard);
+            matchInformation = FindMatchesSquares(newBoard);
 
             Table<bool> tilesToDestroy = new Table<bool>(newBoard.Width, newBoard.Height);
 
@@ -136,7 +137,8 @@ namespace Gazeus.DesafioMatch3.Core
                 //     }
                 // }
                 
-                matchInformation = FindMatches(newBoard);
+                //matchInformation = FindMatchesLines(newBoard);
+                matchInformation = FindMatchesSquares(newBoard);
                 tilesToDestroy.MarkMatches(matchInformation);
                 tilesToDestroy = ApplySpecials(newBoard, matchInformation, tilesToDestroy);
 
@@ -337,34 +339,58 @@ namespace Gazeus.DesafioMatch3.Core
             return board;
         }
 
-        private static List<MatchInformation> FindMatches(Table<Tile> newBoard)
+        private static List<MatchInformation> FindMatchesLines(Table<Tile> board)
         {
             List<MatchInformation> matchInformation = new();
             
-            for (int y = 0; y < newBoard.Height; y++)
+            for (int y = 0; y < board.Height; y++)
             {
-                for (int x = 0; x < newBoard.Width; x++)
+                for (int x = 0; x < board.Width; x++)
                 {
-                    if (newBoard[x,y].Type == (int)TileType.Gray)
+                    if (board[x,y].Type == (int)TileType.Gray)
                         continue;
                     
                     if (x > 1 &&
-                        newBoard[x,y].Type == newBoard[x-1,y].Type &&
-                        newBoard[x - 1,y].Type == newBoard[x - 2,y].Type)
+                        board[x,y].Type == board[x-1,y].Type &&
+                        board[x - 1,y].Type == board[x - 2,y].Type)
                     {
-                        matchInformation.AddAndCombine(new MatchInformation(Direction.Horizontal, x-2,y,3, newBoard[x,y].Type));
+                        matchInformation.AddAndCombine(new MatchInformation(Direction.Horizontal, x-2,y,3, board[x,y].Type));
                     }
 
                     if (y > 1 &&
-                        newBoard[x,y].Type == newBoard[x,y - 1].Type &&
-                        newBoard[x,y - 1].Type == newBoard[x,y - 2].Type)
+                        board[x,y].Type == board[x,y - 1].Type &&
+                        board[x,y - 1].Type == board[x,y - 2].Type)
                     {
-                        matchInformation.AddAndCombine(new MatchInformation(Direction.Vertical, x,y-2,3, newBoard[x,y].Type));
+                        matchInformation.AddAndCombine(new MatchInformation(Direction.Vertical, x,y-2,3, board[x,y].Type));
                     }
                 }
             }
 
             return matchInformation;
+        }
+
+        private static List<MatchInformation> FindMatchesSquares(Table<Tile> board)
+        {
+            List<MatchInformation> matchInformation = new();
+
+            for (int y = 1; y < board.Height; y++)
+            {
+                for (int x = 1; x < board.Width; x++)
+                {
+                    var tileType = board[x, y].Type;
+                    
+                    if(tileType == (int)TileType.Gray)
+                        continue;
+
+                    if (tileType == board[x - 1, y].Type &&
+                        tileType == board[x,y-1].Type &&
+                        tileType == board[x-1,y-1].Type)
+                        matchInformation.Add(new MatchInformation(Direction.Square,x,y,2,tileType));
+                }
+            }
+
+            return matchInformation;
+
         }
         
         public bool IsValidMovement(int fromX, int fromY, int toX, int toY)
@@ -393,6 +419,31 @@ namespace Gazeus.DesafioMatch3.Core
                     {
                         return true;
                     }
+                }
+            }
+
+            return false;
+        }
+
+        public bool IsValidMovementSquare(int fromX, int fromY, int toX, int toY)
+        {
+            Table<Tile> newBoard = Table<Tile>.Clone(_boardTiles);
+
+            (newBoard[toX,toY], newBoard[fromX,fromY]) = (newBoard[fromX,fromY], newBoard[toX,toY]);
+
+            for (int y = 1; y < newBoard.Height; y++)
+            {
+                for (int x = 1; x < newBoard.Width; x++)
+                {
+                    var tileType = newBoard[x, y].Type;
+                    
+                    if(tileType == (int)TileType.Gray)
+                        continue;
+
+                    if (tileType == newBoard[x - 1, y].Type &&
+                        tileType == newBoard[x, y - 1].Type &&
+                        tileType == newBoard[x - 1, y - 1].Type)
+                        return true;
                 }
             }
 
@@ -525,6 +576,114 @@ namespace Gazeus.DesafioMatch3.Core
                 
             }
             
+        }
+
+        public List<Vector2Int> GetSuggestionSquare()
+        {
+            List<Vector2Int> suggestions = new List<Vector2Int>();
+
+            int tileType = -1;
+            
+            for (int y = 0; y < _boardTiles.Height-1; y++)
+            {
+                for (int x = 0; x < _boardTiles.Width-1; x++)
+                {
+                    //■■
+                    //■□
+                    if (x > 0 && y > 0)
+                    {
+                        tileType = _boardTiles[x - 1, y].Type;
+                        
+                        if (tileType == _boardTiles[x - 1, y - 1].Type &&
+                            tileType == _boardTiles[x, y - 1].Type)
+                        {
+                            if (x < _boardTiles.Width)
+                            {
+                                if(tileType == _boardTiles[x+1,y].Type)
+                                    suggestions.Add(new Vector2Int(x+1,y));
+                            }
+
+                            if (y < _boardTiles.Height)
+                            {
+                                if(tileType == _boardTiles[x,y+1].Type)
+                                    suggestions.Add(new Vector2Int(x,y+1));
+                            }
+                        }
+                    }
+                    
+                    //■■
+                    //□■
+                    if (x < _boardTiles.Width && y > 0)
+                    {
+                        tileType = _boardTiles[x + 1, y].Type;
+
+                        if (tileType == _boardTiles[x + 1, y - 1].Type &&
+                            tileType == _boardTiles[x, y - 1].Type)
+                        {
+                            if (x > 0)
+                            {
+                                if(tileType == _boardTiles[x-1,y].Type)
+                                    suggestions.Add(new Vector2Int(x-1,y));
+                            }
+
+                            if (y < _boardTiles.Height)
+                            {
+                                if(tileType == _boardTiles[x,y+1].Type)
+                                    suggestions.Add(new Vector2Int(x,y+1));
+                            }
+                        }
+                    }
+                    
+                    //■□
+                    //■■
+                    if (x > 0 && y < _boardTiles.Height)
+                    {
+                        tileType = _boardTiles[x - 1, y].Type;
+
+                        if (tileType == _boardTiles[x - 1, y + 1].Type &&
+                            tileType == _boardTiles[x, y + 1].Type)
+                        {
+                            if (x < _boardTiles.Width)
+                            {
+                                if(tileType == _boardTiles[x+1,y].Type)
+                                    suggestions.Add(new Vector2Int(x+1,y));
+                            }
+
+                            if (y > 0)
+                            {
+                                if(tileType == _boardTiles[x,y-1].Type)
+                                    suggestions.Add(new Vector2Int(x,y-1));
+                            }
+                        }
+                    }
+                    
+                    //□■
+                    //■■
+                    if (x < _boardTiles.Width && y < _boardTiles.Height)
+                    {
+                        tileType = _boardTiles[x + 1, y].Type;
+
+                        if (tileType == _boardTiles[x, y + 1].Type &&
+                            tileType == _boardTiles[x + 1, y + 1].Type)
+                        {
+                            if (x > 0)
+                            {
+                                if(tileType == _boardTiles[x-1,y].Type)
+                                    suggestions.Add(new Vector2Int(x-1,y));
+                            }
+
+                            if (y > 0)
+                            {
+                                if(tileType == _boardTiles[x,y-1].Type)
+                                    suggestions.Add(new Vector2Int(x,y-1));
+                            }
+                        }
+                    }
+                }
+            }
+
+            return suggestions;
+
         }
 
         private static Table<bool> ApplySpecials(Table<Tile> board, List<MatchInformation> matchInformation, Table<bool> markedTiles)

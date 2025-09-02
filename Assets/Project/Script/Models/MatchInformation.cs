@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -7,7 +8,7 @@ using UnityEngine.UIElements;
 
 namespace Gazeus.DesafioMatch3.Models
 {
-    public enum Direction { Horizontal, Vertical }
+    public enum Direction { Horizontal, Vertical , Square}
     
     public class MatchInformation
     {
@@ -36,6 +37,12 @@ namespace Gazeus.DesafioMatch3.Models
     {
         public static void AddAndCombine(this List<MatchInformation> list, MatchInformation newInfo)
         {
+            if (newInfo.Direction == Direction.Square)
+            {
+                list.Add(newInfo);
+                return;
+            }
+            
             var match = list.Find(listItem =>
             {
                 bool sameType = listItem.TileType == newInfo.TileType;
@@ -71,17 +78,29 @@ namespace Gazeus.DesafioMatch3.Models
 
         }
 
-        public static void MarkMatches(this Table<bool> tileBoard, List<MatchInformation> matches)
+        public static void MarkMatches(this Table<bool> tileBoard, List<MatchInformation> matches) //TODO add squares here
         {
             for (int i = 0; i < matches.Count; i++)
             {
                 var match = matches[i];
-                for (int j = 0; j < match.Length; j++)
+                for (int l = 0; l < match.Length; l++)
                 {
-                    if (match.Direction == Direction.Horizontal)
-                        tileBoard[match.x + j,match.y] = true;
-                    else
-                        tileBoard[match.x,match.y + j] = true;
+                    switch (match.Direction)
+                    {
+                        case Direction.Horizontal:
+                            tileBoard[match.x + l , match.y] = true;
+                            break;
+                        case Direction.Vertical:
+                            tileBoard[match.x,match.y + l] = true;
+                            break;
+                        case Direction.Square:
+                            for (int k = 0; k < match.Length; k++)
+                                tileBoard[match.x - l, match.y - k] = true;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                    
                 }
                 
             }
