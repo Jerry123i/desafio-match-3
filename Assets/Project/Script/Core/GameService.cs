@@ -16,10 +16,20 @@ namespace Gazeus.DesafioMatch3.Core
 
         public Table<Tile> StartGame(int boardWidth, int boardHeight, GameMode gameMode)
         {
-            _gameMode = gameMode;
             _tilesTypes = new List<int> { 0, 1, 2, 3 };
-            _boardTiles = CreateBoard(boardWidth, boardHeight, _tilesTypes);
-
+            
+            _gameMode = gameMode;
+            switch (_gameMode)
+            {
+                case GameMode.SquareMatch:
+                    _boardTiles = CreateBoardSquareGameMode(boardWidth, boardHeight, _tilesTypes);
+                    break;
+                case GameMode.Standard:
+                default:
+                    _boardTiles = CreateBoardStandard(boardWidth, boardHeight, _tilesTypes);
+                    break;
+            }
+            
             return _boardTiles;
         }
         private List<BoardSequence> ModifyBoard(Func<Table<Tile>, Table<Tile>> tileManipulation,
@@ -284,7 +294,45 @@ namespace Gazeus.DesafioMatch3.Core
             );
         }
 
-        private Table<Tile> CreateBoard(int width, int height, List<int> tileTypes)
+        private Table<Tile> CreateBoardSquareGameMode(int width, int height, List<int> tileTypes)
+        {
+            Table<Tile> board = new(width, height);
+            
+            _tileCount = 0;
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    board[x, y] = new Tile { Id = -1, Type = -1 };
+                }
+            }
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    List<int> noMatchTypes = new(tileTypes.Count);
+                    for (int i = 0; i < tileTypes.Count; i++)
+                    {
+                        noMatchTypes.Add(_tilesTypes[i]);
+                    }
+
+                    if (x > 0 && y > 0 &&
+                        board[x - 1, y].Type == board[x - 1, y - 1].Type &&
+                        board[x - 1, y].Type == board[x, y - 1].Type)
+                    {
+                        noMatchTypes.Remove(board[x - 1, y].Type);
+                    }
+                    
+                    board[x,y].Id = _tileCount++;
+                    board[x,y].Type = noMatchTypes[Random.Range(0, noMatchTypes.Count)];
+                }
+            }
+
+            return board;
+        }
+        
+        private Table<Tile> CreateBoardStandard(int width, int height, List<int> tileTypes)
         {
             Table<Tile> board = new(width, height);
             
