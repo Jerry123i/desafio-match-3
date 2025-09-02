@@ -6,9 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="fb9d2257-c028-4143-a5a0-ec08e020e1ce" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Scenes/Gameplay.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Scenes/Gameplay.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Controllers/GameController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Controllers/GameController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Core/GameService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Core/GameService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/MatchInformation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Models/MatchInformation.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +109,7 @@
       <workItem from="1756762540718" duration="35000" />
       <workItem from="1756766201328" duration="5805000" />
       <workItem from="1756814170264" duration="2360000" />
-      <workItem from="1756828179613" duration="3990000" />
+      <workItem from="1756828179613" duration="8304000" />
     </task>
     <servers />
   </component>

@@ -12,9 +12,11 @@ namespace Gazeus.DesafioMatch3.Core
         private Table<Tile> _boardTiles;
         private List<int> _tilesTypes;
         private int _tileCount;
+        private GameMode _gameMode;
 
-        public Table<Tile> StartGame(int boardWidth, int boardHeight)
+        public Table<Tile> StartGame(int boardWidth, int boardHeight, GameMode gameMode)
         {
+            _gameMode = gameMode;
             _tilesTypes = new List<int> { 0, 1, 2, 3 };
             _boardTiles = CreateBoard(boardWidth, boardHeight, _tilesTypes);
 
@@ -22,7 +24,6 @@ namespace Gazeus.DesafioMatch3.Core
         }
         private List<BoardSequence> ModifyBoard(Func<Table<Tile>, Table<Tile>> tileManipulation,
             Action<Table<bool>> destructionParameters,
-            bool useFindMatches,
             Func<Table<Tile>,List<AddedTileInfo>> newTilesParameters = null)
         {
             Table<Tile> newBoard = Table<Tile>.Clone(_boardTiles);
@@ -38,16 +39,27 @@ namespace Gazeus.DesafioMatch3.Core
 
             List<BoardSequence> boardSequences = new();
             List<MatchInformation> matchInformation = new();
-            //matchInformation = FindMatchesLines(newBoard);
-            matchInformation = FindMatchesSquares(newBoard);
+
+            switch (_gameMode)
+            {
+                case GameMode.SquareMatch:
+                    matchInformation = FindMatchesSquares(newBoard);
+                    break;
+                
+                case GameMode.Standard:
+                default:
+                    matchInformation = FindMatchesLines(newBoard);
+                    break;
+            }
+            
 
             Table<bool> tilesToDestroy = new Table<bool>(newBoard.Width, newBoard.Height);
 
-            if(useFindMatches)
+            if(tileManipulation !=null) //No need to check matches if no move was made
                 tilesToDestroy.MarkMatches(matchInformation);
-            else
-                if (destructionParameters != null)
-                    destructionParameters(tilesToDestroy);
+            
+            if (destructionParameters != null)
+                destructionParameters(tilesToDestroy);
 
             tilesToDestroy = ApplySpecials(newBoard, matchInformation, tilesToDestroy);
             
@@ -127,18 +139,20 @@ namespace Gazeus.DesafioMatch3.Core
                 boardSequences.Add(sequence);
                 
                 tilesToDestroy.Clear();
+
+
+                switch (_gameMode)
+                {
+                    case GameMode.SquareMatch:
+                        matchInformation = FindMatchesSquares(newBoard);
+                        break;
+                    
+                    case GameMode.Standard:
+                    default:
+                        matchInformation = FindMatchesLines(newBoard);
+                        break;
+                }
                 
-                // for (int y = 0; y < newBoard.Height; y++)
-                // {
-                //     //tilesToDestroy.Add(new List<bool>(newBoard[y].Count));
-                //     for (int x = 0; x < newBoard.Count; x++)
-                //     {
-                //         tilesToDestroy[y].Add(false);
-                //     }
-                // }
-                
-                //matchInformation = FindMatchesLines(newBoard);
-                matchInformation = FindMatchesSquares(newBoard);
                 tilesToDestroy.MarkMatches(matchInformation);
                 tilesToDestroy = ApplySpecials(newBoard, matchInformation, tilesToDestroy);
 
@@ -211,8 +225,7 @@ namespace Gazeus.DesafioMatch3.Core
                 (board[toX,toY], board[fromX,fromY]) = (board[fromX,fromY], board[toX,toY]);
                 return board;
             },
-            null,
-            true
+            null
             );
         }
 
@@ -233,8 +246,7 @@ namespace Gazeus.DesafioMatch3.Core
                     }
                     return board;
                 },
-                null,
-                true
+                null
             );
         }
         
@@ -259,8 +271,7 @@ namespace Gazeus.DesafioMatch3.Core
                     
                     return board;
                 },
-                null,
-                true
+                null
             );
         }
 
@@ -270,8 +281,8 @@ namespace Gazeus.DesafioMatch3.Core
                 //Swap
                 null,
                 //Destroy
-                board => board[x,y] = true,
-                false);
+                board => board[x,y] = true
+                );
         }
 
         public List<BoardSequence> Explosion(int x, int y, int radius)
@@ -280,8 +291,8 @@ namespace Gazeus.DesafioMatch3.Core
                 //Swap
                 null,
                 //Destroy
-                board => board.MarkRadius(x, y, radius),
-                false);
+                board => board.MarkRadius(x, y, radius)
+                );
         }
 
         public List<BoardSequence> EarthQuake()
@@ -291,7 +302,6 @@ namespace Gazeus.DesafioMatch3.Core
                 null,
                 //Destroy
                 board => board.MarkEarthquakePattern(),
-                false,
                 TileAdditionBlockers
             );
         }
@@ -392,8 +402,21 @@ namespace Gazeus.DesafioMatch3.Core
             return matchInformation;
 
         }
-        
+
         public bool IsValidMovement(int fromX, int fromY, int toX, int toY)
+        {
+            switch (_gameMode)
+            {
+                case GameMode.SquareMatch:
+                    return IsValidMovementSquare(fromX, fromY, toX, toY);
+                
+                case GameMode.Standard:
+                default:
+                    return IsValidMovementLinesMatch(fromX, fromY, toX, toY);
+            }
+        }
+        
+        private bool IsValidMovementLinesMatch(int fromX, int fromY, int toX, int toY)
         {
             Table<Tile> newBoard = Table<Tile>.Clone(_boardTiles);
 
@@ -449,9 +472,22 @@ namespace Gazeus.DesafioMatch3.Core
 
             return false;
         }
+
+        public List<Vector2Int> GetSuggestions()
+        {
+            switch (_gameMode)
+            {
+                case GameMode.SquareMatch:
+                    return GetSuggestionSquare(); 
+                
+                case GameMode.Standard:
+                default:
+                    return GetSuggestionsLines();
+            }
+        }
         
         //Non-exhaustive list of possible tiles to move
-        public List<Vector2Int> GetSuggestions()
+        private List<Vector2Int> GetSuggestionsLines()
         {
             List<Vector2Int> suggestions = new List<Vector2Int>();
 
@@ -578,7 +614,7 @@ namespace Gazeus.DesafioMatch3.Core
             
         }
 
-        public List<Vector2Int> GetSuggestionSquare()
+        private List<Vector2Int> GetSuggestionSquare()
         {
             List<Vector2Int> suggestions = new List<Vector2Int>();
 

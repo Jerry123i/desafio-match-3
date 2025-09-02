@@ -14,6 +14,7 @@ namespace Gazeus.DesafioMatch3.Controllers
         [SerializeField] private BoardView _boardView;
         [SerializeField] private int _boardHeight = 10;
         [SerializeField] private int _boardWidth = 10;
+        [SerializeField] private GameMode _gameMode;
 
         [SerializeField] private PlayerResourcesView _playerResourcesView;
         
@@ -43,7 +44,7 @@ namespace Gazeus.DesafioMatch3.Controllers
 
         private void Start()
         {
-            Table<Tile> board = _gameEngine.StartGame(_boardWidth, _boardHeight);
+            Table<Tile> board = _gameEngine.StartGame(_boardWidth, _boardHeight, _gameMode);
             _boardView.CreateBoard(board);
         }
         #endregion
@@ -155,7 +156,6 @@ namespace Gazeus.DesafioMatch3.Controllers
                     _isAnimating = true;
                     _boardView.SwapTiles(_selectedX, _selectedY, x, y).onComplete += () =>
                     {
-                        //bool isValid = _gameEngine.IsValidMovementSquare(_selectedX, _selectedY, x, y);
                         bool isValid = _gameEngine.IsValidMovement(_selectedX, _selectedY, x, y);
                         if (isValid)
                         {
@@ -230,25 +230,33 @@ namespace Gazeus.DesafioMatch3.Controllers
         public void GetHint()
         {
             Debug.Log("GetHint");
-            
-            if(_isAnimating)
+
+            if (_isAnimating)
                 return;
-            
-            if(_isShowingHint)
+
+
+            if (_isShowingHint)
                 return;
+                
 
             suggestionCallTween.Restart();
             
             _isShowingHint = true;
-            //var suggestions = _gameEngine.GetSuggestions();
-            var suggestions = _gameEngine.GetSuggestionSquare();
-            
-            if(suggestions.Count == 0)
+            var suggestions = _gameEngine.GetSuggestions();
+
+            if (suggestions.Count == 0)
+            {
+                Debug.Log("No hints found");
+                Debug.Log("-----");
+                _isShowingHint = false;
                 return;
+            }
+                
             
             var tile = suggestions[Random.Range(0, suggestions.Count - 1)];
             
             _boardView.PlayTileSuggestionAnimate(tile.x, tile.y).onComplete += () => { _isShowingHint = false;};
+            Debug.Log("-----");
         }
 
         private void OnFinishAnimating()

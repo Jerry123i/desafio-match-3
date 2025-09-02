@@ -3604,6 +3604,7 @@ MonoBehaviour:
   _boardView: {fileID: 429446043}
   _boardHeight: 10
   _boardWidth: 10
+  _gameMode: 0
   _playerResourcesView: {fileID: 427909458}
 --- !u!4 &1361904665
 Transform:
