@@ -193,6 +193,8 @@ namespace Gazeus.DesafioMatch3.Controllers
             
             if(_selectedX<0 || _selectedY<0)
                 return;
+
+            _isAnimating = true;
             
             _boardView.ClearSelectedSpotEffect();
             suggestionCallTween.Pause();
@@ -208,7 +210,7 @@ namespace Gazeus.DesafioMatch3.Controllers
                 return;
             
             suggestionCallTween.Restart();
-            
+            _isAnimating = true;
             _boardView.ClearSelectedSpotEffect();
             suggestionCallTween.Pause();
             List<BoardSequence> result = _gameEngine.Explosion(_selectedX, _selectedY, 5);
@@ -220,6 +222,8 @@ namespace Gazeus.DesafioMatch3.Controllers
             if (_isAnimating) return;
             
             suggestionCallTween.Restart();
+
+            _isAnimating = true;
             
             _boardView.ClearSelectedSpotEffect();
             suggestionCallTween.Pause();
