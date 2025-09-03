@@ -17,9 +17,11 @@ namespace Gazeus.DesafioMatch3.Core
         //For use in Find the Pattern game
         private Table<int> pattern;
 
-        public Table<Tile> StartGame(int boardWidth, int boardHeight, GameMode gameMode)
+        public Table<Tile> StartGame(int boardWidth, int boardHeight, GameMode gameMode, List<TileType> initialBuildTiles)
         {
-            _tilesTypes = new List<int> { 0, 1, 2, 3 };
+            _tilesTypes = new List<int>();
+            for (int i = 0; i < initialBuildTiles.Count; i++)
+                _tilesTypes.Add((int)initialBuildTiles[i]);
             
             _gameMode = gameMode;
             switch (_gameMode)
@@ -829,7 +831,7 @@ namespace Gazeus.DesafioMatch3.Core
             return markedTiles;
         }
 
-        public void GeneratePatternToFind()
+        private void GeneratePatternToFind()
         {
             var emptyTable = new Table<int>(3, 3, -1);
 
@@ -857,6 +859,11 @@ namespace Gazeus.DesafioMatch3.Core
                 }
             }
 
+        }
+
+        public Table<int> GetPattern()
+        {
+            return pattern;
         }
         
     }
