@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3744744803570392504}
   - component: {fileID: 7661316176150635904}
   - component: {fileID: 8425725358490113002}
+  - component: {fileID: 7910764356810240823}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -69,5 +70,17 @@ MonoBehaviour:
   _gameController: {fileID: 7661316176150635904}
   _pickButton: {fileID: 0}
   _bombButton: {fileID: 0}
-  _squareRotateButton: {fileID: 0}
   _freeSwapButton: {fileID: 0}
+--- !u!114 &7910764356810240823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7150806662286657578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22f89ee96e7249a4d9239ac2c21cdb0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _visualizer: {fileID: 0}

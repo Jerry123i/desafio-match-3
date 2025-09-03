@@ -6,6 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Project/Scenes/Gameplay.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Project/Scenes/MainMenu.unity
+    guid: 9879ff2abb1976449bce84cebd78946e
+  - enabled: 1
+    path: Assets/Project/Scenes/StandardScene.unity
+    guid: 35980796fe26fde49b7e4b79e9ecee5c
+  - enabled: 1
+    path: Assets/Project/Scenes/SquaresRotationScene.unity
+    guid: 804e9aecc074eb04b9a734f0eaa8c806
+  - enabled: 1
+    path: Assets/Project/Scenes/SquaresMatchScene.unity
+    guid: c001dad91b21cd84a965570ec9c56bc3
+  - enabled: 1
+    path: Assets/Project/Scenes/FindThePatternScene.unity
+    guid: 581a936882815ed42bc01b54c3987c10
   m_configObjects: {}
