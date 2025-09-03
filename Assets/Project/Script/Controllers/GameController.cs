@@ -57,6 +57,7 @@ namespace Gazeus.DesafioMatch3.Controllers
 
         private void AnimateBoard(List<BoardSequence> boardSequences, int index, Action onComplete)
         {
+            Debug.Log("AnimateBoard");
             BoardSequence boardSequence = boardSequences[index];
 
             Sequence sequence = DOTween.Sequence();
@@ -314,6 +315,7 @@ namespace Gazeus.DesafioMatch3.Controllers
             suggestionCallTween.Restart();
             DeselectTile();
             SetItem((int)Item.None);
+            UpdatePattern();
         }
         
         private void SetSelectedTile(int x, int y)
@@ -328,7 +330,6 @@ namespace Gazeus.DesafioMatch3.Controllers
             _selectedY = -1;
             _boardView.ClearSelectedSpotEffect();
             _boardView.SetTileSpotSelectedEffect(_selectedX,_selectedY);
-            UpdatePattern();
         }
         
         //TODO Receber conjuntos de linhas e calcular aqui a pontuação
