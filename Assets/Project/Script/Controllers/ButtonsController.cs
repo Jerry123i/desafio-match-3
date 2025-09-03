@@ -14,6 +14,7 @@ namespace Gazeus.DesafioMatch3.Controllers
         [SerializeField] private Button _pickButton;
         [SerializeField] private Button _bombButton;
         [SerializeField] private Button _freeSwapButton;
+        [SerializeField] private Button _earthquake;
 
         private void Awake()
         {
@@ -33,6 +34,11 @@ namespace Gazeus.DesafioMatch3.Controllers
             {
                 _gameController.SetItem(Item.FreeSwap);
                 _freeSwapButton.interactable = false;
+            });
+            
+            _earthquake.onClick.AddListener(() =>
+            {
+                _gameController.EarthquakeEffect();
             });
             
         }

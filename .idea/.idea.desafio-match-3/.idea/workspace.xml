@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fb9d2257-c028-4143-a5a0-ec08e020e1ce" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/Buttons/SceneSelectButton.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/Buttons/SceneSelectButton.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/Tiles/OrangeTile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/Tiles/OrangeTile.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/Tiles/PinkTile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/Tiles/PinkTile.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Scenes/FindThePatternScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Scenes/FindThePatternScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Scenes/MainMenu.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Scenes/SquaresMatchScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Scenes/SquaresMatchScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Controllers/ButtonsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Controllers/ButtonsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
-    </list>
+    <list default="true" id="fb9d2257-c028-4143-a5a0-ec08e020e1ce" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
