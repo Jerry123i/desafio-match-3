@@ -13,6 +13,8 @@ namespace Gazeus.DesafioMatch3.Views
         [SerializeField] private Image _highlightImage;
         [SerializeField] private Image _suggestionImage;
 
+        [SerializeField] private Color tipColor;
+
         private Tween _suggestionTween;
         
         private int _x;
@@ -59,7 +61,7 @@ namespace Gazeus.DesafioMatch3.Views
             
             float animationTime = 1f;
 
-            _suggestionTween = DOVirtual.Color(Color.clear, Color.yellow, animationTime, c => _suggestionImage.color = c).SetLoops(4);
+            _suggestionTween = DOVirtual.Color(Color.clear, tipColor, animationTime, c => _suggestionImage.color = c).SetLoops(4);
             _suggestionTween.onComplete+=(() => { _suggestionImage.color = Color.clear; });
 
             return _suggestionTween;
