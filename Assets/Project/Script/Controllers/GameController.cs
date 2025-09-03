@@ -209,7 +209,11 @@ namespace Gazeus.DesafioMatch3.Controllers
                 {
                     suggestionCallTween.Pause();
                     List<BoardSequence> swapResult = _gameEngine.SwapTile(_selectedX, _selectedY, x, y);
-                    AnimateBoard(swapResult, 0, OnFinishAnimating);
+                    AnimateBoard(swapResult, 0, ()=>
+                    {
+                        UpdatePatternView();
+                        OnFinishAnimating();
+                    });
                             
                 }
                 else
@@ -283,7 +287,7 @@ namespace Gazeus.DesafioMatch3.Controllers
             Debug.Log("-----");
         }
         
-        private void UpdatePattern()
+        private void UpdatePatternView()
         {
             BoardSequence boardSequence = new BoardSequence();
             
@@ -315,7 +319,6 @@ namespace Gazeus.DesafioMatch3.Controllers
             suggestionCallTween.Restart();
             DeselectTile();
             SetItem((int)Item.None);
-            UpdatePattern();
         }
         
         private void SetSelectedTile(int x, int y)
