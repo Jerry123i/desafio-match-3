@@ -1812,6 +1812,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 524184284}
   m_CullTransparentMesh: 1
+--- !u!114 &525922127 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8833291724641678347, guid: 5d2117db6a6101c4ca99b7502a87d20f, type: 3}
+  m_PrefabInstance: {fileID: 308814542}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &541411152
 GameObject:
   m_ObjectHideFlags: 0
@@ -2136,7 +2147,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1361904664}
         m_TargetAssemblyTypeName: Gazeus.DesafioMatch3.Controllers.GameController,
           DesafioMatch3
-        m_MethodName: TilesSlideRight
+        m_MethodName: EarthquakeEffect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3731,9 +3742,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameController: {fileID: 1361904664}
-  pickButton: {fileID: 473231239}
-  bombButton: {fileID: 2091139947}
-  squareRotateButton: {fileID: 1813896211}
+  _pickButton: {fileID: 473231239}
+  _bombButton: {fileID: 2091139947}
+  _squareRotateButton: {fileID: 1813896211}
+  _freeSwapButton: {fileID: 525922127}
 --- !u!1 &1370266342
 GameObject:
   m_ObjectHideFlags: 0

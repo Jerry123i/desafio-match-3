@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Gazeus.DesafioMatch3.Models;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Gazeus.DesafioMatch3.Controllers
@@ -10,37 +11,45 @@ namespace Gazeus.DesafioMatch3.Controllers
     public class ButtonsController : MonoBehaviour
     {
         [SerializeField] private GameController _gameController;
-        [SerializeField] private Button pickButton;
-        [SerializeField] private Button bombButton;
-        [SerializeField] private Button squareRotateButton;
+        [SerializeField] private Button _pickButton;
+        [SerializeField] private Button _bombButton;
+        [SerializeField] private Button _squareRotateButton;
+        [SerializeField] private Button _freeSwapButton;
 
         private void Awake()
         {
-            pickButton.onClick.AddListener(() =>
+            _pickButton.onClick.AddListener(() =>
             {
                 _gameController.SetItem(Item.Pick);
-                pickButton.interactable = false;
+                _pickButton.interactable = false;
             });
             
-            bombButton.onClick.AddListener(() =>
+            _bombButton.onClick.AddListener(() =>
             {
                 _gameController.SetItem(Item.Bomb);
-                bombButton.interactable = false;
+                _bombButton.interactable = false;
             });
             
-            squareRotateButton.onClick.AddListener(() =>
+            _squareRotateButton.onClick.AddListener(() =>
             {
                 _gameController.SetItem(Item.SquareRotate);
-                squareRotateButton.interactable = false;
+                _squareRotateButton.interactable = false;
+            });
+            
+            _freeSwapButton.onClick.AddListener(() =>
+            {
+                _gameController.SetItem(Item.FreeSwap);
+                _freeSwapButton.interactable = false;
             });
             
         }
 
         public void ActivateButtons()
         {
-            pickButton.interactable = true;
-            bombButton.interactable = true;
-            squareRotateButton.interactable = true;
+            _pickButton.interactable = true;
+            _bombButton.interactable = true;
+            _squareRotateButton.interactable = true;
+            _freeSwapButton.interactable = true;
         }
     }
 }

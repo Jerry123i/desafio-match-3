@@ -59,7 +59,6 @@ namespace Gazeus.DesafioMatch3.Controllers
 
         private void AnimateBoard(List<BoardSequence> boardSequences, int index, Action onComplete)
         {
-            Debug.Log("AnimateBoard");
             BoardSequence boardSequence = boardSequences[index];
 
             Sequence sequence = DOTween.Sequence();
@@ -215,7 +214,6 @@ namespace Gazeus.DesafioMatch3.Controllers
             switch (selectedItem)
             {
                 case Item.None:
-                    
                     if (_selectedX > -1 && _selectedY > -1)
                     {
                         //Deselect if far click
@@ -230,7 +228,12 @@ namespace Gazeus.DesafioMatch3.Controllers
                         //Set selected
                         SetSelectedTile(x, y);
                     }
-                    
+                    break;
+                case Item.FreeSwap:
+                    if (_selectedX > -1 && _selectedY > -1)
+                            TryTileSwap(x, y);
+                    else
+                        SetSelectedTile(x, y);
                     break;
                 case Item.Pick:
                     DestroyTile(x,y);
@@ -244,8 +247,7 @@ namespace Gazeus.DesafioMatch3.Controllers
                     SquareRotateCounterClockwise(x,y);
                     break;
                 
-                case Item.FreeSwap:
-                    break;
+
             }
             
             
@@ -269,7 +271,8 @@ namespace Gazeus.DesafioMatch3.Controllers
                     List<BoardSequence> swapResult = _gameEngine.SwapTile(_selectedX, _selectedY, x, y);
                     AnimateBoard(swapResult, 0, ()=>
                     {
-                        UpdatePatternView();
+                        if(_gameMode == GameMode.FindThePattern)
+                            UpdatePatternView();
                         OnFinishAnimating();
                     });
                             
