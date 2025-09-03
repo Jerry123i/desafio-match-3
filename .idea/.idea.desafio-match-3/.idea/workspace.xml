@@ -6,7 +6,24 @@
   <component name="ChangeListManager">
     <list default="true" id="fb9d2257-c028-4143-a5a0-ec08e020e1ce" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Controllers/GameController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Controllers/GameController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Core/GameService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Core/GameService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/AddedTileInfo.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/AddedTileInfo.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/BoardSequence.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/BoardSequence.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/GameModes.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/GameModes.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/Item.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/Item.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/MatchInformation.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/MatchInformation.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/MovedTileInfo.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/MovedTileInfo.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/PlayerResources.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/PlayerResources.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/Tile.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/Tile.cs.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +41,10 @@
     <setting file="mock://D:/Projetos E Traballhos/Unity/desafio-match-3/Assets/Project/Script/Controllers/GameController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://D:/Projetos E Traballhos/Unity/desafio-match-3/Assets/Project/Script/Controllers/GameController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://D:/Projetos E Traballhos/Unity/desafio-match-3/Assets/Project/Script/Controllers/GameController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Project/Script/Core/MatchInformationListFunctions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/Projetos E Traballhos/Unity/desafio-match-3/Assets/Project/Script/Models/MatchInformation.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Projetos E Traballhos/Unity/desafio-match-3/Assets/Project/Script/Models/MatchInformation.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/Projetos E Traballhos/Unity/desafio-match-3/Assets/Project/Script/Models/MatchInformation.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ide.rider@3.0.36/Rider/Editor/ProjectGeneration/ProjectGeneration.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.textmeshpro@3.0.9/Scripts/Runtime/TextMeshProUGUI.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
@@ -37,25 +58,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Attach to Unity Editor.Attach to Unity Editor.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;igor/item-rework&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Attach to Unity Editor.Attach to Unity Editor.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "igor/refactor-matches",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;rider.external.source.directories&quot;: [
-      &quot;C:\\Users\\PC1\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache&quot;,
-      &quot;C:\\Users\\PC1\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache&quot;,
-      &quot;C:\\Users\\PC1\\AppData\\Local\\Symbols\\src&quot;
+  "keyToStringList": {
+    "rider.external.source.directories": [
+      "C:\\Users\\PC1\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
+      "C:\\Users\\PC1\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
+      "C:\\Users\\PC1\\AppData\\Local\\Symbols\\src"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2022.3.62f1\Editor\Unity.exe" />

@@ -28,10 +28,15 @@ namespace Gazeus.DesafioMatch3.Core
                 case GameMode.SquareMatch:
                     _boardTiles = CreateBoardSquareGameMode(boardWidth, boardHeight, _tilesTypes);
                     break;
+                
+                case GameMode.FindThePattern:
+                    _boardTiles = CreateBoardStandard(boardWidth, boardHeight, _tilesTypes);
+                    GeneratePattern();
+                    break;
+                
                 case GameMode.Standard:
                 default:
                     _boardTiles = CreateBoardStandard(boardWidth, boardHeight, _tilesTypes);
-                    GeneratePattern(); //TODO mover isso
                     break;
             }
             
@@ -442,7 +447,7 @@ namespace Gazeus.DesafioMatch3.Core
                             }
                         }
 
-                        onMatchFound(new MatchInformation(coordinates));
+                        onMatchFound(new PatternMatch(coordinates));
                         if(stopAfterMatch)
                             return;
                         isMatch = false;
@@ -481,7 +486,7 @@ namespace Gazeus.DesafioMatch3.Core
                         tileType == board[x - 1, y].Type &&
                         tileType == board[x - 2, y].Type)
                     {
-                        onMatchFound(new MatchInformation(Direction.Horizontal, x - 2, y, 3, tileType));
+                        onMatchFound(new LinearMatch(Direction.Horizontal, x - 2, y, 3, tileType));
                         if(stopAfterMatch)
                             return;
                     }
@@ -490,7 +495,7 @@ namespace Gazeus.DesafioMatch3.Core
                         tileType == board[x, y - 1].Type &&
                         tileType == board[x, y - 2].Type)
                     {
-                        onMatchFound(new MatchInformation(Direction.Vertical, x, y - 2, 3, tileType));
+                        onMatchFound(new LinearMatch(Direction.Vertical, x, y - 2, 3, tileType));
                         if(stopAfterMatch)
                             return;
                     }
@@ -511,7 +516,7 @@ namespace Gazeus.DesafioMatch3.Core
                         tileType == board[x, y - 1].Type &&
                         tileType == board[x - 1, y - 1].Type)
                     {
-                        onMatchFound(new MatchInformation(Direction.Square, x, y, 2, tileType));
+                        onMatchFound(new SquareMatch( x, y, 2, tileType));
                         if(stopAfterMatch)
                             return;
                     }
@@ -527,20 +532,24 @@ namespace Gazeus.DesafioMatch3.Core
             {
                 case GameMode.FindThePattern:
                     ScanForPattern(board,
-                        match => matches.AddAndCombine(match),
+                        match => matches.Add(match),
                         false);
                     break;
                 
                 case GameMode.SquareMatch:
                     ScanForSquareMatches(board,
-                        match => matches.AddAndCombine(match),
+                        match => matches.Add(match),
                         false);
                     break;
                 
                 case GameMode.Standard:
                 default:
                     ScanForLineMatches(board,
-                        match=>matches.AddAndCombine(match),
+                        match=>
+                        {
+                            matches.Add(match);
+                            matches.TryCombineLast();
+                        },
                         false);
                     break;
             }
@@ -835,7 +844,9 @@ namespace Gazeus.DesafioMatch3.Core
         {
             for (int i = 0; i < matchInformation.Count; i++)
             {
-                var match = matchInformation[i];
+                LinearMatch match = (LinearMatch)matchInformation[i];
+                if (match.MatchType != MatchType.Linear)
+                    continue;
                 
                 if(match.Length < 4)
                     continue;

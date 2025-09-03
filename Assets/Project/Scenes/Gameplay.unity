@@ -2771,7 +2771,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 948210119}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -3834,7 +3834,7 @@ MonoBehaviour:
   _boardHeight: 10
   _boardWidth: 10
   _gameMode: 0
-  _tileTypes: 00000000010000000200000003000000
+  _tileTypes: 0000000001000000020000000300000004000000
   _playerResourcesView: {fileID: 427909458}
 --- !u!4 &1361904665
 Transform:
