@@ -12,6 +12,7 @@ namespace Gazeus.DesafioMatch3.Controllers
     public class GameController : MonoBehaviour
     {
         [SerializeField] private BoardView _boardView;
+        [SerializeField] private ButtonsController _buttonsController;
         [SerializeField] private int _boardHeight = 10;
         [SerializeField] private int _boardWidth = 10;
         [SerializeField] private GameMode _gameMode;
@@ -27,6 +28,7 @@ namespace Gazeus.DesafioMatch3.Controllers
         private readonly int scoreMultiplier = 10;
 
         private Tween suggestionCallTween;
+        private Item selectedItem;
         
         #region Unity
         private void Awake()
@@ -140,45 +142,50 @@ namespace Gazeus.DesafioMatch3.Controllers
             };
         }
 
+        public void SetItem(Item item)
+        {
+            DeselectTile();
+            selectedItem = item;
+            _buttonsController.ActivateButtons();
+        }
+        
         private void OnTileClick(int x, int y)
         {
             if (_isAnimating) return;
 
-            if (_selectedX > -1 && _selectedY > -1)
+            switch (selectedItem)
             {
-                if (Mathf.Abs(_selectedX - x) + Mathf.Abs(_selectedY - y) > 1)
-                {
-                    _selectedX = -1;
-                    _selectedY = -1;
-                }
-                else
-                {
-                    _isAnimating = true;
-                    _boardView.SwapTiles(_selectedX, _selectedY, x, y).onComplete += () =>
+                case Item.None:
+                    
+                    if (_selectedX > -1 && _selectedY > -1)
                     {
-                        bool isValid = _gameEngine.IsValidMovement(_selectedX, _selectedY, x, y);
-                        if (isValid)
-                        {
-                            suggestionCallTween.Pause();
-                            List<BoardSequence> swapResult = _gameEngine.SwapTile(_selectedX, _selectedY, x, y);
-                            AnimateBoard(swapResult, 0, OnFinishAnimating);
-                            
-                        }
-                        else
-                        {
-                            _boardView.SwapTiles(x, y, _selectedX, _selectedY).onComplete += () => _isAnimating = false;
-                        }
-                        _selectedX = -1;
-                        _selectedY = -1;
-                        _boardView.SetTileSpotSelectedEffect(_selectedX,_selectedY);
-                    };
-                }
+                        //Deselect if far click
+                        if (Mathf.Abs(_selectedX - x) + Mathf.Abs(_selectedY - y) > 1)
+                            DeselectTile();
+                        //Run swap tiles
+                        else 
+                            TryTileSwap(x, y);
+                    }
+                    else
+                    {
+                        //Set selected
+                        SetSelectedTile(x, y);
+                    }
+                    
+                    break;
+                case Item.Pick:
+                    DestroyTile(x,y);
+                    break;
+                
+                case Item.Bomb:
+                    DestroyExplosion(x,y);
+                    break;
+                
+                case Item.Swap:
+                    break;
             }
-            else
-            {
-                _selectedX = x;
-                _selectedY = y;
-            }
+            
+            
             
             if(_isAnimating)
                 _boardView.ClearSelectedSpotEffect();
@@ -187,33 +194,47 @@ namespace Gazeus.DesafioMatch3.Controllers
             
         }
 
-        public void DestroySelectedTile()
+        private void TryTileSwap(int x, int y)
+        {
+            _isAnimating = true;
+            _boardView.SwapTiles(_selectedX, _selectedY, x, y).onComplete += () =>
+            {
+                bool isValid = _gameEngine.IsValidMovement(_selectedX, _selectedY, x, y);
+                if (isValid)
+                {
+                    suggestionCallTween.Pause();
+                    List<BoardSequence> swapResult = _gameEngine.SwapTile(_selectedX, _selectedY, x, y);
+                    AnimateBoard(swapResult, 0, OnFinishAnimating);
+                            
+                }
+                else
+                {
+                    _boardView.SwapTiles(x, y, _selectedX, _selectedY).onComplete += OnFinishAnimating;
+                }
+            };
+        }
+
+        private void DestroyTile(int x, int y)
         {
             if (_isAnimating) return;
-            
-            if(_selectedX<0 || _selectedY<0)
-                return;
 
             _isAnimating = true;
             
             _boardView.ClearSelectedSpotEffect();
             suggestionCallTween.Pause();
-            List<BoardSequence> result = _gameEngine.DestroySingleTile(_selectedX, _selectedY);
+            List<BoardSequence> result = _gameEngine.DestroySingleTile(x, y);
             AnimateBoard(result, 0, OnFinishAnimating);
         }
 
-        public void DestroyExplosion()
+        private void DestroyExplosion(int x, int y)
         {
             if (_isAnimating) return;
-            
-            if(_selectedX<0 || _selectedY<0)
-                return;
             
             suggestionCallTween.Restart();
             _isAnimating = true;
             _boardView.ClearSelectedSpotEffect();
             suggestionCallTween.Pause();
-            List<BoardSequence> result = _gameEngine.Explosion(_selectedX, _selectedY, 5);
+            List<BoardSequence> result = _gameEngine.Explosion(x, y, 5);
             AnimateBoard(result, 0, OnFinishAnimating);
         }
 
@@ -265,9 +286,21 @@ namespace Gazeus.DesafioMatch3.Controllers
         {
             _isAnimating = false;
             suggestionCallTween.Restart();
+            DeselectTile();
+            SetItem((int)Item.None);
+        }
+        
+        private void SetSelectedTile(int x, int y)
+        {
+            _selectedX = x;
+            _selectedY = y;
+            _boardView.SetTileSpotSelectedEffect(_selectedX,_selectedY);
+        }
+        private void DeselectTile()
+        {
             _selectedX = -1;
             _selectedY = -1;
-            _boardView.SetTileSpotSelectedEffect(_selectedX,_selectedY);
+            _boardView.ClearSelectedSpotEffect();
         }
         
         //TODO Receber conjuntos de linhas e calcular aqui a pontuação
