@@ -29,6 +29,16 @@ namespace Gazeus.DesafioMatch3
 
             array = new T[width*height];
         }
+
+        public Table(int width, int height, T baseValue)
+        {
+            Width = width;
+            Height = height;
+
+            array = new T[width*height];
+            for (int i = 0; i < array.Length; i++)
+                array[i] = baseValue;
+        }
         
         public static Table<T1> Clone<T1>(Table<T1> tableToClone) where T1 : ICloneable
         {

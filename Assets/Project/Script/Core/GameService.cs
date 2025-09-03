@@ -13,6 +13,9 @@ namespace Gazeus.DesafioMatch3.Core
         private List<int> _tilesTypes;
         private int _tileCount;
         private GameMode _gameMode;
+        
+        //For use in Find the Pattern game
+        private Table<int> pattern;
 
         public Table<Tile> StartGame(int boardWidth, int boardHeight, GameMode gameMode)
         {
@@ -27,6 +30,7 @@ namespace Gazeus.DesafioMatch3.Core
                 case GameMode.Standard:
                 default:
                     _boardTiles = CreateBoardStandard(boardWidth, boardHeight, _tilesTypes);
+                    GeneratePatternToFind(); //TODO mover isso
                     break;
             }
             
@@ -147,6 +151,8 @@ namespace Gazeus.DesafioMatch3.Core
             } while (matchInformation.Count > 0);
 
             _boardTiles = newBoard;
+
+            GeneratePatternToFind();
 
             return boardSequences;
 
@@ -374,6 +380,56 @@ namespace Gazeus.DesafioMatch3.Core
 
             return board;
         }
+
+        private void ScanForPattern(Table<Tile> board, Action<MatchInformation> onMatchFound, bool stopAfterMatch)
+        {
+            bool isMatch = false;
+            
+            for (int y = 0; y < board.Height-pattern.Height + 1; y++)
+            {
+                for (int x = 0; x < board.Width-pattern.Width + 1; x++)
+                {
+                    CheckPattern(x, y);
+
+                    if (isMatch)
+                    {
+                        List<Vector2Int> coordinates = new();
+                        
+                        for (int h = 0; h < pattern.Height; h++)
+                        {
+                            for (int w = 0; w < pattern.Width; w++)
+                            {
+                                if(pattern[w,h] == -1)
+                                    continue;
+                                coordinates.Add(new Vector2Int(x+w,y+h));
+                            }
+                        }
+
+                        onMatchFound(new MatchInformation(coordinates));
+                        if(stopAfterMatch)
+                            return;
+                        isMatch = false;
+                    }
+                }
+            }
+
+            void CheckPattern(int x, int y)
+            {
+                for (int h = 0; h < pattern.Height; h++)
+                {
+                    for (int w = 0; w < pattern.Width; w++)
+                    {
+                        if(pattern[w, h] == -1)
+                            continue;
+                        
+                        if (board[x+w, y+h].Type != pattern[w, h])
+                            return;
+                    }
+                }
+
+                isMatch = true;
+            }
+        }
         
         private void ScanForLineMatches(Table<Tile> board, Action<MatchInformation> onMatchFound, bool stopAfterMatch)
         {
@@ -430,8 +486,14 @@ namespace Gazeus.DesafioMatch3.Core
         {
             List<MatchInformation> matches = new();
 
-            switch (_gameMode)
+            switch (_gameMode) //TODO simplificar essas chamadas
             {
+                case GameMode.FindThePattern:
+                    ScanForPattern(board,
+                        match => matches.AddAndCombine(match),
+                        false);
+                    break;
+                
                 case GameMode.SquareMatch:
                     ScanForSquareMatches(board,
                         match => matches.AddAndCombine(match),
@@ -457,8 +519,13 @@ namespace Gazeus.DesafioMatch3.Core
             
             bool found = false;
             
-            switch (_gameMode)
+            switch (_gameMode) //TODO simplificar essas chamadas
             {
+                case GameMode.FindThePattern:
+                    ScanForPattern(newBoard,
+                        a=>found=true,
+                        true);
+                    break;
                 case GameMode.SquareMatch:
                     ScanForSquareMatches(newBoard,
                         a=>found=true,
@@ -479,7 +546,10 @@ namespace Gazeus.DesafioMatch3.Core
         {
             switch (_gameMode)
             {
-                case GameMode.SquareMatch:
+                case GameMode.FindThePattern:
+                    return new List<Vector2Int>();
+                    
+;                case GameMode.SquareMatch:
                     return GetSuggestionSquare(); 
                 
                 case GameMode.Standard:
@@ -757,6 +827,36 @@ namespace Gazeus.DesafioMatch3.Core
             }
         
             return markedTiles;
+        }
+
+        public void GeneratePatternToFind()
+        {
+            var emptyTable = new Table<int>(3, 3, -1);
+
+            int targetX = Random.Range(1, _boardTiles.Width - emptyTable.Width-1);
+            int targetY = Random.Range(1, _boardTiles.Height - emptyTable.Height-1);
+
+            for (int x = 0; x < emptyTable.Width; x++)
+            {
+                for (int y = 0; y < emptyTable.Height; y++)
+                {
+                    emptyTable[x, y] = _boardTiles[targetX + x, targetY + y].Type;
+                }
+            }
+
+            emptyTable[0, 0] = _boardTiles[targetX, targetY - 1].Type;
+
+            pattern = emptyTable;
+
+            
+            for (int y = 0; y < emptyTable.Height; y++)
+            {
+                for (int x = 0; x < emptyTable.Width; x++)
+                {
+                    Debug.Log($"{x},{y} :"+(TileType)emptyTable[x, y]);
+                }
+            }
+
         }
         
     }
