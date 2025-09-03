@@ -5,6 +5,7 @@ using Gazeus.DesafioMatch3.Core;
 using Gazeus.DesafioMatch3.Models;
 using Gazeus.DesafioMatch3.Views;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace Gazeus.DesafioMatch3.Controllers
@@ -14,6 +15,7 @@ namespace Gazeus.DesafioMatch3.Controllers
         [SerializeField] private BoardView _boardView;
         [SerializeField] private BoardView _patternView;
         [SerializeField] private ButtonsController _buttonsController;
+        [SerializeField] private Button _offClickDetector;
         [SerializeField] private int _boardHeight = 10;
         [SerializeField] private int _boardWidth = 10;
         [SerializeField] private GameMode _gameMode;
@@ -37,8 +39,10 @@ namespace Gazeus.DesafioMatch3.Controllers
         {
             _gameEngine = new GameService();
             _boardView.TileClicked += OnTileClick;
+            _offClickDetector.onClick.AddListener(OnOffClick);
             
             suggestionCallTween = DOVirtual.DelayedCall(15f, GetHint).SetLoops(-1);
+            
         }
 
         private void OnDestroy()
@@ -246,11 +250,8 @@ namespace Gazeus.DesafioMatch3.Controllers
                 case Item.SquareRotate:
                     SquareRotateCounterClockwise(x,y);
                     break;
-                
 
             }
-            
-            
             
             if(_isAnimating)
                 _boardView.ClearSelectedSpotEffect();
@@ -379,6 +380,12 @@ namespace Gazeus.DesafioMatch3.Controllers
             suggestionCallTween.Restart();
             DeselectTile();
             SetItem((int)Item.None);
+        }
+
+        private void OnOffClick()
+        {
+            DeselectTile();
+            SetItem(Item.None);
         }
         
         private void SetSelectedTile(int x, int y)

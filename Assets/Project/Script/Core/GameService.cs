@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Gazeus.DesafioMatch3.Models;
 using UnityEngine;
 using Random = UnityEngine.Random;
