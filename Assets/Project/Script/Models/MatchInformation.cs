@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 
 namespace Gazeus.DesafioMatch3.Models
 {
-    public enum Direction { Horizontal, Vertical , Square}
+    public enum Direction { Horizontal, Vertical , Square, Special}
     
     public class MatchInformation
     {
@@ -17,6 +17,8 @@ namespace Gazeus.DesafioMatch3.Models
         public int y { get; set; }
         public int Length { get; set; }
         public int TileType { get; set; }
+        
+        public List<Vector2Int> SpecialMatchCoordinates { get; set; } //TODO Find another solution for this
 
         public MatchInformation(Direction direction, int x, int y, int length, int type)
         {
@@ -25,6 +27,12 @@ namespace Gazeus.DesafioMatch3.Models
             this.y = y;
             this.Length = length;
             this.TileType = type;
+        }
+
+        public MatchInformation(List<Vector2Int> coordinates)
+        {
+            this.Direction = Direction.Special;
+            SpecialMatchCoordinates = coordinates;
         }
 
         public override string ToString()
@@ -37,7 +45,7 @@ namespace Gazeus.DesafioMatch3.Models
     {
         public static void AddAndCombine(this List<MatchInformation> list, MatchInformation newInfo)
         {
-            if (newInfo.Direction == Direction.Square)
+            if (newInfo.Direction == Direction.Square || newInfo.Direction == Direction.Special)
             {
                 list.Add(newInfo);
                 return;
@@ -83,6 +91,17 @@ namespace Gazeus.DesafioMatch3.Models
             for (int i = 0; i < matches.Count; i++)
             {
                 var match = matches[i];
+
+                if (match.Direction == Direction.Special)
+                {
+                    for (int j = 0; j < match.SpecialMatchCoordinates.Count; j++)
+                    {
+                        var coordinate = match.SpecialMatchCoordinates[j];
+                        tileBoard[coordinate.x, coordinate.y] = true;
+                    }
+                    continue;
+                }
+                
                 for (int l = 0; l < match.Length; l++)
                 {
                     switch (match.Direction)

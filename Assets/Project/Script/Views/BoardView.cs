@@ -21,7 +21,7 @@ namespace Gazeus.DesafioMatch3.Views
         
         private TileSpotView currentlySelectedSpot;
 
-        public void CreateBoard(Table<Tile> board)
+        public void CreateBoard(Table<Tile> board, bool viewOnly = false)
         {
             _boardContainer.constraintCount = board.Width;
             _tiles = new GameObject[board.Height][];
@@ -37,7 +37,9 @@ namespace Gazeus.DesafioMatch3.Views
                     TileSpotView tileSpot = Instantiate(_tileSpotPrefab);
                     tileSpot.transform.SetParent(_boardContainer.transform, false);
                     tileSpot.SetPosition(x, y);
-                    tileSpot.Clicked += TileSpot_Clicked;
+                    
+                    if(!viewOnly)
+                        tileSpot.Clicked += TileSpot_Clicked;
 
                     _tileSpots[y][x] = tileSpot;
 
@@ -64,6 +66,10 @@ namespace Gazeus.DesafioMatch3.Views
 
                 TileSpotView tileSpot = _tileSpots[position.y][position.x];
 
+                if(addedTileInfo.Type == -1)
+                    continue;
+                    
+                
                 GameObject tilePrefab = _tilePrefabRepository.TileTypePrefabList[addedTileInfo.Type];
                 GameObject tile = Instantiate(tilePrefab);
                 tileSpot.SetTile(tile);
@@ -88,6 +94,7 @@ namespace Gazeus.DesafioMatch3.Views
 
             return DOVirtual.DelayedCall(0.2f, () => { });
         }
+
 
         public Tween MoveTiles(List<MovedTileInfo> movedTiles)
         {

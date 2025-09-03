@@ -12,10 +12,12 @@ namespace Gazeus.DesafioMatch3.Controllers
     public class GameController : MonoBehaviour
     {
         [SerializeField] private BoardView _boardView;
+        [SerializeField] private BoardView _patternView;
         [SerializeField] private ButtonsController _buttonsController;
         [SerializeField] private int _boardHeight = 10;
         [SerializeField] private int _boardWidth = 10;
         [SerializeField] private GameMode _gameMode;
+        [SerializeField] private List<TileType> _tileTypes;
 
         [SerializeField] private PlayerResourcesView _playerResourcesView;
         
@@ -46,8 +48,10 @@ namespace Gazeus.DesafioMatch3.Controllers
 
         private void Start()
         {
-            Table<Tile> board = _gameEngine.StartGame(_boardWidth, _boardHeight, _gameMode);
+            Table<Tile> board = _gameEngine.StartGame(_boardWidth, _boardHeight, _gameMode, _tileTypes);
             _boardView.CreateBoard(board);
+            _patternView.CreateBoard(new Table<Tile>(_gameEngine.GetPattern()));
+            //UpdatePattern();
         }
         #endregion
 
@@ -254,8 +258,6 @@ namespace Gazeus.DesafioMatch3.Controllers
 
         public void GetHint()
         {
-            Debug.Log("GetHint");
-
             if (_isAnimating)
                 return;
 
@@ -269,17 +271,41 @@ namespace Gazeus.DesafioMatch3.Controllers
 
             if (suggestions.Count == 0)
             {
-                Debug.Log("No hints found");
-                Debug.Log("-----");
                 _isShowingHint = false;
                 return;
             }
                 
             
-            var tile = suggestions[Random.Range(0, suggestions.Count - 1)];
+            Vector2Int tile = suggestions[Random.Range(0, suggestions.Count)];
             
             _boardView.PlayTileSuggestionAnimate(tile.x, tile.y).onComplete += () => { _isShowingHint = false;};
             Debug.Log("-----");
+        }
+        
+        private void UpdatePattern()
+        {
+            BoardSequence boardSequence = new BoardSequence();
+            
+            var patternTable = _gameEngine.GetPattern();
+
+            boardSequence.MatchedPosition = new List<Vector2Int>();
+            boardSequence.AddedTiles = new List<AddedTileInfo>();
+            
+            for (int x = 0; x < patternTable.Width; x++)
+            for (int y = 0; y < patternTable.Height; y++)
+            {
+                boardSequence.MatchedPosition.Add(new Vector2Int(x,y));
+                boardSequence.AddedTiles.Add(new AddedTileInfo()
+                {
+                    Position = new Vector2Int(x,y),
+                    Type = patternTable[x,y]
+                });
+            }
+            
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(_patternView.DestroyTiles(boardSequence.MatchedPosition));
+            sequence.Append(_patternView.CreateTile(boardSequence.AddedTiles));
+
         }
 
         private void OnFinishAnimating()
@@ -301,6 +327,8 @@ namespace Gazeus.DesafioMatch3.Controllers
             _selectedX = -1;
             _selectedY = -1;
             _boardView.ClearSelectedSpotEffect();
+            _boardView.SetTileSpotSelectedEffect(_selectedX,_selectedY);
+            UpdatePattern();
         }
         
         //TODO Receber conjuntos de linhas e calcular aqui a pontuação

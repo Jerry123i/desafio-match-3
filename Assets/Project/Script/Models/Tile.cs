@@ -6,6 +6,16 @@ namespace Gazeus.DesafioMatch3.Models
     
     public class Tile : ICloneable
     {
+        public Tile()
+        {
+        }
+
+        public Tile(int id, int type)
+        {
+            Id = id;
+            Type = type;
+        }
+
         public int Id { get; set; }
         public int Type { get; set; }
 
