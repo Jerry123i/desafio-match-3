@@ -481,7 +481,7 @@ namespace Gazeus.DesafioMatch3.Core
                         tileType == board[x - 1, y].Type &&
                         tileType == board[x - 2, y].Type)
                     {
-                        onMatchFound(new MatchInformation(Direction.Horizontal, x - 2, y, 3, tileType));
+                        onMatchFound(new MatchInformation(MatchType.Horizontal, x - 2, y, 3, tileType));
                         if(stopAfterMatch)
                             return;
                     }
@@ -490,7 +490,7 @@ namespace Gazeus.DesafioMatch3.Core
                         tileType == board[x, y - 1].Type &&
                         tileType == board[x, y - 2].Type)
                     {
-                        onMatchFound(new MatchInformation(Direction.Vertical, x, y - 2, 3, tileType));
+                        onMatchFound(new MatchInformation(MatchType.Vertical, x, y - 2, 3, tileType));
                         if(stopAfterMatch)
                             return;
                     }
@@ -511,7 +511,7 @@ namespace Gazeus.DesafioMatch3.Core
                         tileType == board[x, y - 1].Type &&
                         tileType == board[x - 1, y - 1].Type)
                     {
-                        onMatchFound(new MatchInformation(Direction.Square, x, y, 2, tileType));
+                        onMatchFound(new MatchInformation(MatchType.Square, x, y, 2, tileType));
                         if(stopAfterMatch)
                             return;
                     }
@@ -843,12 +843,12 @@ namespace Gazeus.DesafioMatch3.Core
                 switch ((TileType)match.TileType)
                 {
                     case TileType.Blue: // Blue - Line Clear
-                        if (match.Direction == Direction.Horizontal)
+                        if (match.MatchType == MatchType.Horizontal)
                             markedTiles.MarkLine(match.y);
                         return markedTiles; 
                     
                     case TileType.Green: // Green - Column Clear
-                        if (match.Direction == Direction.Vertical)
+                        if (match.MatchType == MatchType.Vertical)
                             markedTiles.MarkColumn(match.x);
                         return markedTiles;
                     
