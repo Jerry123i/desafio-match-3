@@ -3700,8 +3700,8 @@ MonoBehaviour:
   _buttonsController: {fileID: 1361904666}
   _boardHeight: 10
   _boardWidth: 10
-  _gameMode: 2
-  _tileTypes: 0000000001000000020000000300000004000000
+  _gameMode: 0
+  _tileTypes: 00000000010000000200000003000000
   _playerResourcesView: {fileID: 427909458}
 --- !u!4 &1361904665
 Transform:
@@ -3733,6 +3733,7 @@ MonoBehaviour:
   _gameController: {fileID: 1361904664}
   pickButton: {fileID: 473231239}
   bombButton: {fileID: 2091139947}
+  squareRotateButton: {fileID: 1813896211}
 --- !u!1 &1370266342
 GameObject:
   m_ObjectHideFlags: 0
@@ -4380,6 +4381,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -582}
   m_SizeDelta: {x: -40, y: -70}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1813896211 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8833291724641678347, guid: 5d2117db6a6101c4ca99b7502a87d20f, type: 3}
+  m_PrefabInstance: {fileID: 206534616}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1817466636
 GameObject:
   m_ObjectHideFlags: 0

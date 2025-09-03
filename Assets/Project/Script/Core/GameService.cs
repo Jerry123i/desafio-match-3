@@ -270,6 +270,42 @@ namespace Gazeus.DesafioMatch3.Core
                 null
             );
         }
+        
+        public List<BoardSequence> SquareRotateClockwise(int x, int y)
+        {
+            return ModifyBoard(
+                //Swap
+                (board) =>
+                {
+                    Tile first = board[x, y];
+                    board[x, y] = board[x, y - 1];
+                    board[x, y - 1] = board[x - 1, y - 1];
+                    board[x - 1, y - 1] = board[x - 1, y];
+                    board[x - 1, y] = first;
+                    
+                    return board;
+                },
+                null
+                );
+        }
+        
+        public List<BoardSequence> SquareRotateCounterClockwise(int x, int y)
+        {
+            return ModifyBoard(
+                //Swap
+                (board) =>
+                {
+                    Tile first = board[x, y];
+                    board[x, y] = board[x - 1, y];
+                    board[x - 1, y] = board[x - 1, y - 1];
+                    board[x - 1, y - 1] = board[x, y - 1];
+                    board[x, y - 1] = first;
+
+                    return board;
+                },
+                null
+            );
+        }
 
         public List<BoardSequence> DestroySingleTile(int x, int y)
         {

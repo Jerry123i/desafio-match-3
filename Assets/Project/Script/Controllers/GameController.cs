@@ -50,7 +50,9 @@ namespace Gazeus.DesafioMatch3.Controllers
         {
             Table<Tile> board = _gameEngine.StartGame(_boardWidth, _boardHeight, _gameMode, _tileTypes);
             _boardView.CreateBoard(board);
-            _patternView.CreateBoard(new Table<Tile>(_gameEngine.GetPattern()));
+            
+            if(_gameMode == GameMode.FindThePattern)
+                _patternView.CreateBoard(new Table<Tile>(_gameEngine.GetPattern()));
             //UpdatePattern();
         }
         #endregion
@@ -147,6 +149,58 @@ namespace Gazeus.DesafioMatch3.Controllers
             };
         }
 
+        private void SquareRotateClockwise(int x, int y)
+        {
+            if(_isAnimating) return;
+
+            _isAnimating = true;
+            
+            Sequence sequence = DOTween.Sequence();
+
+            if (x < 1)
+                x = 1;
+            if (y < 1)
+                y = 1;
+
+            sequence.Append(_boardView.SwapTiles(x, y, x, y - 1));
+            sequence.Join(_boardView.SwapTiles(x, y - 1, x - 1, y - 1));
+            sequence.Join(_boardView.SwapTiles(x-1, y - 1, x - 1, y));
+
+            suggestionCallTween.Pause();
+
+            sequence.onComplete += () =>
+            {
+                List<BoardSequence> result = _gameEngine.SquareRotateClockwise(x, y);
+                AnimateBoard(result, 0, OnFinishAnimating);
+            };
+        }
+        
+        private void SquareRotateCounterClockwise(int x, int y)
+        {
+            if(_isAnimating) return;
+
+            _isAnimating = true;
+            
+            Sequence sequence = DOTween.Sequence();
+
+            if (x < 1)
+                x = 1;
+            if (y < 1)
+                y = 1;
+
+            sequence.Append(_boardView.SwapTiles(x-1, y, x-1, y-1));
+            sequence.Join(_boardView.SwapTiles(x-1, y-1, x, y-1));
+            sequence.Join(_boardView.SwapTiles(x, y-1, x, y));
+
+            suggestionCallTween.Pause();
+
+            sequence.onComplete += () =>
+            {
+                List<BoardSequence> result = _gameEngine.SquareRotateCounterClockwise(x, y);
+                AnimateBoard(result, 0, OnFinishAnimating);
+            };
+        }
+
         public void SetItem(Item item)
         {
             DeselectTile();
@@ -186,7 +240,11 @@ namespace Gazeus.DesafioMatch3.Controllers
                     DestroyExplosion(x,y);
                     break;
                 
-                case Item.Swap:
+                case Item.SquareRotate:
+                    SquareRotateCounterClockwise(x,y);
+                    break;
+                
+                case Item.FreeSwap:
                     break;
             }
             
@@ -284,7 +342,6 @@ namespace Gazeus.DesafioMatch3.Controllers
             Vector2Int tile = suggestions[Random.Range(0, suggestions.Count)];
             
             _boardView.PlayTileSuggestionAnimate(tile.x, tile.y).onComplete += () => { _isShowingHint = false;};
-            Debug.Log("-----");
         }
         
         private void UpdatePatternView()

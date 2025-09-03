@@ -12,6 +12,7 @@ namespace Gazeus.DesafioMatch3.Controllers
         [SerializeField] private GameController _gameController;
         [SerializeField] private Button pickButton;
         [SerializeField] private Button bombButton;
+        [SerializeField] private Button squareRotateButton;
 
         private void Awake()
         {
@@ -27,12 +28,19 @@ namespace Gazeus.DesafioMatch3.Controllers
                 bombButton.interactable = false;
             });
             
+            squareRotateButton.onClick.AddListener(() =>
+            {
+                _gameController.SetItem(Item.SquareRotate);
+                squareRotateButton.interactable = false;
+            });
+            
         }
 
         public void ActivateButtons()
         {
             pickButton.interactable = true;
             bombButton.interactable = true;
+            squareRotateButton.interactable = true;
         }
     }
 }
