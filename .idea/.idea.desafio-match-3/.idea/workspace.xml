@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fb9d2257-c028-4143-a5a0-ec08e020e1ce" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Core/GameService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Core/GameService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Models/MatchInformation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Models/MatchInformation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Scenes/Gameplay.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Scenes/Gameplay.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Scenes/GameplayItensBackup.unity" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Scenes/GameplayItensBackup.unity.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +46,7 @@
   "keyToString": {
     "Attach to Unity Editor.Attach to Unity Editor.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "igor-carneiro",
+    "git-widget-placeholder": "igor/scenes",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
