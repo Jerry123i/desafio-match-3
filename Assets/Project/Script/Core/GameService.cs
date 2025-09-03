@@ -32,7 +32,7 @@ namespace Gazeus.DesafioMatch3.Core
                 case GameMode.Standard:
                 default:
                     _boardTiles = CreateBoardStandard(boardWidth, boardHeight, _tilesTypes);
-                    GeneratePatternToFind(); //TODO mover isso
+                    GeneratePattern(); //TODO mover isso
                     break;
             }
             
@@ -154,7 +154,7 @@ namespace Gazeus.DesafioMatch3.Core
 
             _boardTiles = newBoard;
 
-            GeneratePatternToFind();
+            GeneratePattern();
 
             return boardSequences;
 
@@ -831,33 +831,62 @@ namespace Gazeus.DesafioMatch3.Core
             return markedTiles;
         }
 
-        private void GeneratePatternToFind()
+        private void GeneratePattern()
         {
-            var emptyTable = new Table<int>(3, 3, -1);
-
-            int targetX = Random.Range(1, _boardTiles.Width - emptyTable.Width-1);
-            int targetY = Random.Range(1, _boardTiles.Height - emptyTable.Height-1);
-
-            for (int x = 0; x < emptyTable.Width; x++)
-            {
-                for (int y = 0; y < emptyTable.Height; y++)
-                {
-                    emptyTable[x, y] = _boardTiles[targetX + x, targetY + y].Type;
-                }
-            }
-
-            emptyTable[0, 0] = _boardTiles[targetX, targetY - 1].Type;
-
-            pattern = emptyTable;
-
+            Table<int> patternModel = PatternModels.GetRandomPattern();
             
-            for (int y = 0; y < emptyTable.Height; y++)
+            Table<int> table = new(3, 3, -1);
+
+            int targetX = Random.Range(1, _boardTiles.Width - table.Width-1);
+            int targetY = Random.Range(1, _boardTiles.Height - table.Height-1);
+
+            for (int x = 0; x < table.Width; x++)
             {
-                for (int x = 0; x < emptyTable.Width; x++)
+                for (int y = 0; y < table.Height; y++)
                 {
-                    Debug.Log($"{x},{y} :"+(TileType)emptyTable[x, y]);
+                    if(patternModel[x,y] == 0)
+                        continue;
+                    table[x, y] = _boardTiles[targetX + x, targetY + y].Type;
                 }
             }
+
+            Vector2Int indexToMove = patternModel.GetIndexRandomValueDifferentFrom(0);
+
+            if (indexToMove.x < 0)
+            {
+                pattern = table;
+                return;
+            }
+
+            List<Vector2Int> directions = new ()
+            {
+                new(1,0),
+                new(0,1),
+                new(-1,0),
+                new(0,-1)
+            };
+            
+            Vector2Int randomDirection = directions[Random.Range(0, 4)];
+            
+            //Checks if the swapping includes tiles already in the pattern
+            bool insideMove = false;
+            
+            int xToSwap = indexToMove.x + randomDirection.x;
+            int yToSwap = indexToMove.y + randomDirection.y;
+
+            if (xToSwap < table.Width && yToSwap < table.Height &&
+                xToSwap >= 0 && yToSwap >= 0)
+            {
+                if (table[xToSwap, yToSwap] > -1)
+                    insideMove = true;
+            }
+
+            if (insideMove)
+                (table[indexToMove.x, indexToMove.y], table[xToSwap, yToSwap]) = (table[xToSwap, yToSwap], table[indexToMove.x, indexToMove.y]);
+            else
+                table[indexToMove.x, indexToMove.y] = _boardTiles[targetX+xToSwap, targetY+yToSwap].Type;
+
+            pattern = table;
 
         }
 

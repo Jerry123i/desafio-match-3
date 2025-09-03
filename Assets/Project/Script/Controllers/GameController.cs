@@ -233,8 +233,6 @@ namespace Gazeus.DesafioMatch3.Controllers
 
         public void GetHint()
         {
-            Debug.Log("GetHint");
-
             if (_isAnimating)
                 return;
 
@@ -248,14 +246,12 @@ namespace Gazeus.DesafioMatch3.Controllers
 
             if (suggestions.Count == 0)
             {
-                Debug.Log("No hints found");
-                Debug.Log("-----");
                 _isShowingHint = false;
                 return;
             }
                 
             
-            var tile = suggestions[Random.Range(0, suggestions.Count - 1)];
+            var tile = suggestions[Random.Range(0, suggestions.Count)];
             
             _boardView.PlayTileSuggestionAnimate(tile.x, tile.y).onComplete += () => { _isShowingHint = false;};
             Debug.Log("-----");

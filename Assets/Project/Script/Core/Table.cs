@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Gazeus.DesafioMatch3.Models;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Gazeus.DesafioMatch3
 {
@@ -60,6 +63,7 @@ namespace Gazeus.DesafioMatch3
             }
         }
         
+        
         public static Table<T1> Clone<T1>(Table<T1> tableToClone) where T1 : ICloneable
         {
             var newTable = new Table<T1>(tableToClone.Width, tableToClone.Height);
@@ -70,6 +74,39 @@ namespace Gazeus.DesafioMatch3
             }
 
             return newTable;
+
+        }
+
+        public static Table<T1> CreateCopy<T1>(Table<T1> tableToClone) where T1 : struct
+        {
+            var newTable = new Table<T1>(tableToClone.Width, tableToClone.Height);
+
+            for (int i = 0; i < tableToClone.array.Length; i++)
+            {
+                newTable.array[i] = tableToClone.array[i];
+            }
+
+            return newTable;
+        }
+        
+
+        public Vector2Int GetIndexRandomValueDifferentFrom(T value)
+        {
+            List<Vector2Int> possibleIndexes = new();
+
+            for (int x = 0; x < Width; x++)
+                for (int y = 0; y < Height; y++)
+                {
+                    if(this[x,y].Equals(value))
+                        continue;
+                    
+                    possibleIndexes.Add(new Vector2Int(x,y));
+                }
+
+            if (possibleIndexes.Count == 0)
+                return new Vector2Int(-1, -1);
+
+            return possibleIndexes[Random.Range(0, possibleIndexes.Count)];
 
         }
         

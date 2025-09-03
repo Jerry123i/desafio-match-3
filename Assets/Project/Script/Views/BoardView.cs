@@ -66,6 +66,10 @@ namespace Gazeus.DesafioMatch3.Views
 
                 TileSpotView tileSpot = _tileSpots[position.y][position.x];
 
+                if(addedTileInfo.Type == -1)
+                    continue;
+                    
+                
                 GameObject tilePrefab = _tilePrefabRepository.TileTypePrefabList[addedTileInfo.Type];
                 GameObject tile = Instantiate(tilePrefab);
                 tileSpot.SetTile(tile);
