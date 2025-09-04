@@ -18,7 +18,10 @@ namespace Gazeus.DesafioMatch3.Controllers
         [SerializeField] private Button _offClickDetector;
         [SerializeField] private int _boardHeight = 10;
         [SerializeField] private int _boardWidth = 10;
+        
+        [Header("Game Settings")]
         [SerializeField] private GameMode _gameMode;
+        [SerializeField] private ControllerMode _controllerMode;
         [SerializeField] private List<TileType> _tileTypes;
 
         [SerializeField] private PlayerResourcesView _playerResourcesView;
@@ -33,6 +36,7 @@ namespace Gazeus.DesafioMatch3.Controllers
 
         private Tween suggestionCallTween;
         private Item selectedItem;
+        private RotationDirection _rotationDirection;
         
         #region Unity
         private void Awake()
@@ -219,20 +223,10 @@ namespace Gazeus.DesafioMatch3.Controllers
             switch (selectedItem)
             {
                 case Item.None:
-                    if (_selectedX > -1 && _selectedY > -1)
-                    {
-                        //Deselect if far click
-                        if (Mathf.Abs(_selectedX - x) + Mathf.Abs(_selectedY - y) > 1)
-                            DeselectTile();
-                        //Run swap tiles
-                        else 
-                            TryTileSwap(x, y);
-                    }
+                    if (_controllerMode == ControllerMode.Rotation)
+                        RotateModeClick(x, y);
                     else
-                    {
-                        //Set selected
-                        SetSelectedTile(x, y);
-                    }
+                        StandardControllerClick(x, y);
                     break;
                 case Item.FreeSwap:
                     if (_selectedX > -1 && _selectedY > -1)
@@ -259,6 +253,32 @@ namespace Gazeus.DesafioMatch3.Controllers
             else
                 _boardView.SetTileSpotSelectedEffect(_selectedX,_selectedY);
             
+        }
+
+        private void RotateModeClick(int x, int y)
+        {
+            if(_rotationDirection == RotationDirection.ClockWise)
+                SquareRotateClockwise(x,y);
+            else
+                SquareRotateCounterClockwise(x,y);
+        }
+
+        private void StandardControllerClick(int x, int y)
+        {
+            if (_selectedX > -1 && _selectedY > -1)
+            {
+                //Deselect if far click
+                if (Mathf.Abs(_selectedX - x) + Mathf.Abs(_selectedY - y) > 1)
+                    DeselectTile();
+                //Run swap tiles
+                else 
+                    TryTileSwap(x, y);
+            }
+            else
+            {
+                //Set selected
+                SetSelectedTile(x, y);
+            }
         }
 
         private void TryTileSwap(int x, int y)
@@ -403,11 +423,14 @@ namespace Gazeus.DesafioMatch3.Controllers
             _boardView.SetTileSpotSelectedEffect(_selectedX,_selectedY);
         }
         
-        //TODO Receber conjuntos de linhas e calcular aqui a pontuação
         private void AddPoints(int value)
         {
             _playerResourcesView.AddPoints(value);
         }
-        
+
+        public void SetDirection(RotationDirection value)
+        {
+            _rotationDirection = value;
+        }
     }
 }

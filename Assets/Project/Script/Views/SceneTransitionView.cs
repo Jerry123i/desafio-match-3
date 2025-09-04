@@ -16,7 +16,7 @@ namespace Gazeus.DesafioMatch3
 
         private Tween AnimateTransitionSlider()
         {
-            return _slider.DOMoveX(0f, 0.55f).SetEase(Ease.InCirc);
+            return _slider.DOMoveX(-100f, .85f).SetEase(Ease.OutSine);
         }
         
     }

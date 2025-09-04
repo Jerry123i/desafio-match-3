@@ -57,10 +57,16 @@ namespace Gazeus.DesafioMatch3.Views
 
         public Tween AnimateSuggestionHighlight()
         {
+            if (_highlightImage == null)
+                return DOVirtual.DelayedCall(0f, () => {});
+            
             StopSuggestionTween();
             
             float animationTime = 1f;
 
+            if (_highlightImage == null)
+                return DOVirtual.DelayedCall(0f, () => {});
+            
             _suggestionTween = DOVirtual.Color(Color.clear, Color.magenta, animationTime, c => _suggestionImage.color = c).SetLoops(4);
             _suggestionTween.onComplete+=(() => { _suggestionImage.color = Color.clear; });
 
