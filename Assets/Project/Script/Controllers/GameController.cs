@@ -352,6 +352,9 @@ namespace Gazeus.DesafioMatch3.Controllers
             if (_isShowingHint)
                 return;
 
+            if(_controllerMode == ControllerMode.Rotation)
+                return;
+            
             suggestionCallTween.Restart();
             
             _isShowingHint = true;

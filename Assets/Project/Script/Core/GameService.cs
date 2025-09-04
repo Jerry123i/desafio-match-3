@@ -523,7 +523,7 @@ namespace Gazeus.DesafioMatch3.Core
         {
             List<MatchInformation> matches = new();
 
-            switch (_gameMode) //TODO simplificar essas chamadas
+            switch (_gameMode) 
             {
                 case GameMode.FindThePattern:
                     ScanForPattern(board,
