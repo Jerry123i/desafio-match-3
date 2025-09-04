@@ -37,6 +37,7 @@ namespace Gazeus.DesafioMatch3.Controllers
         #region Unity
         private void Awake()
         {
+            DOTween.SetTweensCapacity(500,100);
             _gameEngine = new GameService();
             _boardView.TileClicked += OnTileClick;
             _offClickDetector.onClick.AddListener(OnOffClick);

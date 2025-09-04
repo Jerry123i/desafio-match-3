@@ -5,8 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fb9d2257-c028-4143-a5a0-ec08e020e1ce" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.desafio-match-3/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/Gazeus.colors" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Gazeus.colors" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/Buttons/QuitButton.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/Buttons/QuitButton.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/Buttons/SceneSelectButton.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/Buttons/SceneSelectButton.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/SceneObjects/GameCanvas.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/SceneObjects/GameCanvas.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Views/TileSpotView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Views/TileSpotView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/SceneObjects/PlayerResources.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/SceneObjects/PlayerResources.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/SceneObjects/TextArea.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/SceneObjects/TextArea.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Prefabs/Tiles/YellowTile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Prefabs/Tiles/YellowTile.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Scenes/0_MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Scenes/0_MainMenu.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Scenes/1_StandardScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Scenes/1_StandardScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Scenes/2_SquaresRotationScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Scenes/2_SquaresRotationScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Scenes/3_SquaresMatchScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Scenes/3_SquaresMatchScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Scenes/4_FindThePatternScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Scenes/4_FindThePatternScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Script/Controllers/GameController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Script/Controllers/GameController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -18,15 +18,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5801399917749186803, guid: a6fb14bf42a1f2d46ab2f40ba89df970, type: 3}
       propertyPath: m_Color.g
-      value: 0.6
+      value: 0.5022
       objectReference: {fileID: 0}
     - target: {fileID: 5801399917749186803, guid: a6fb14bf42a1f2d46ab2f40ba89df970, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0.83699995
       objectReference: {fileID: 0}
     - target: {fileID: 6588062894895293356, guid: a6fb14bf42a1f2d46ab2f40ba89df970, type: 3}
       propertyPath: m_Name
-      value: _YellowTile
+      value: YellowTile
       objectReference: {fileID: 0}
     - target: {fileID: 8253062065937978491, guid: a6fb14bf42a1f2d46ab2f40ba89df970, type: 3}
       propertyPath: m_Pivot.x
